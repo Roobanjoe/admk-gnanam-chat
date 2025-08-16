@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import Aurora from "@/components/Aurora";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import About from "./pages/About";
@@ -18,6 +19,13 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <TooltipProvider>
+        <Aurora 
+          colorStops={["#1e40af", "#7c3aed", "#dc2626"]} 
+          amplitude={1.2}
+          blend={0.4}
+          speed={0.8}
+          mouseInfluence={1.0}
+        />
         <Toaster />
         <Sonner />
         <BrowserRouter>
