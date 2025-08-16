@@ -18,15 +18,46 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Inter', 'system-ui', 'sans-serif'],
+				display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
-				background: 'hsl(var(--background))',
+				background: {
+					DEFAULT: 'hsl(var(--background))',
+					secondary: 'hsl(var(--background-secondary))',
+					tertiary: 'hsl(var(--background-tertiary))'
+				},
 				foreground: 'hsl(var(--foreground))',
+				
+				// Glass system
+				glass: {
+					DEFAULT: 'hsl(var(--glass))',
+					border: 'hsl(var(--glass-border))',
+					hover: 'hsl(var(--glass-hover))'
+				},
+				
+				// Neon system
+				neon: {
+					DEFAULT: 'hsl(var(--neon))',
+					glow: 'hsl(var(--neon-glow))',
+					subtle: 'hsl(var(--neon-subtle))'
+				},
+				
+				// AIADMK brand colors
+				aiadmk: {
+					red: 'hsl(var(--aiadmk-red))',
+					black: 'hsl(var(--aiadmk-black))',
+					'red-glow': 'hsl(var(--aiadmk-red-glow))'
+				},
+				
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))',
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -50,7 +81,9 @@ export default {
 				},
 				card: {
 					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
+					foreground: 'hsl(var(--card-foreground))',
+					border: 'hsl(var(--card-border))',
+					hover: 'hsl(var(--card-hover))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -62,6 +95,24 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
+			},
+			backgroundImage: {
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-neon': 'var(--gradient-neon)',
+				'gradient-glass': 'var(--gradient-glass)',
+				'gradient-sidebar': 'var(--gradient-sidebar)',
+			},
+			transitionTimingFunction: {
+				'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
+				'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+			},
+			boxShadow: {
+				'neon': 'var(--shadow-neon)',
+				'glass': 'var(--shadow-glass)',
+				'elevated': 'var(--shadow-elevated)',
+			},
+			backdropBlur: {
+				'glass': '20px',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

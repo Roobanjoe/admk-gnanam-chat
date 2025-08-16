@@ -1,96 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* AIADMK Futuristic Design System with Glassmorphism & Neon Accents */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
+    /* AIADMK Futuristic Dark Theme */
+    --background: 220 15% 6%;
+    --background-secondary: 220 12% 8%;
+    --background-tertiary: 220 10% 10%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    /* Glassmorphism Cards */
+    --glass: 220 15% 8% / 0.5;
+    --glass-border: 210 40% 98% / 0.1;
+    --glass-hover: 220 12% 12% / 0.7;
 
-    --popover: 222.2 84% 4.9%;
+    /* Neon Accent #49F2C2 */
+    --neon: 166 86% 63%;
+    --neon-glow: 166 86% 63% / 0.3;
+    --neon-subtle: 166 86% 63% / 0.1;
+
+    /* AIADMK Brand Colors */
+    --primary: 166 86% 63%; /* Neon accent */
+    --primary-foreground: 220 15% 6%;
+    --primary-glow: 166 86% 63% / 0.4;
+
+    /* Red & Black AIADMK Colors */
+    --aiadmk-red: 0 84% 55%;
+    --aiadmk-black: 220 15% 6%;
+    --aiadmk-red-glow: 0 84% 55% / 0.3;
+
+    /* Glassmorphism Card System */
+    --card: 220 12% 8% / 0.6;
+    --card-foreground: 210 40% 98%;
+    --card-border: 210 40% 98% / 0.1;
+    --card-hover: 220 10% 12% / 0.8;
+
+    /* Interactive Elements */
+    --popover: 220 12% 8% / 0.95;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 220 10% 15%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 10% 12%;
+    --muted-foreground: 215 15% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 166 86% 63%;
+    --accent-foreground: 220 15% 6%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Borders & Inputs */
+    --border: 210 40% 98% / 0.1;
+    --border-hover: 166 86% 63% / 0.3;
+    --input: 220 12% 8% / 0.6;
+    --input-border: 210 40% 98% / 0.2;
+    --ring: 166 86% 63%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(220 15% 6%), hsl(220 12% 8%));
+    --gradient-neon: linear-gradient(135deg, hsl(166 86% 63%), hsl(180 100% 50%));
+    --gradient-glass: linear-gradient(135deg, hsl(220 12% 8% / 0.6), hsl(220 10% 10% / 0.3));
+    --gradient-sidebar: linear-gradient(180deg, hsl(220 15% 6%), hsl(220 12% 8%));
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Shadows & Glows */
+    --shadow-neon: 0 0 40px hsl(166 86% 63% / 0.3);
+    --shadow-glass: 0 8px 32px hsl(220 15% 6% / 0.3);
+    --shadow-elevated: 0 20px 60px hsl(220 15% 6% / 0.5);
+
+    --radius: 1rem; /* rounded-2xl default */
+
+    /* Sidebar */
+    --sidebar-background: 220 15% 6%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 166 86% 63%;
+    --sidebar-primary-foreground: 220 15% 6%;
+    --sidebar-accent: 220 12% 8%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 210 40% 98% / 0.1;
+    --sidebar-ring: 166 86% 63%;
+  }
+
+  /* Light theme fallback (minimal since app is dark-first) */
+  .light {
+    --background: 210 40% 98%;
+    --background-secondary: 210 40% 95%;
+    --background-tertiary: 210 40% 92%;
+    --foreground: 220 15% 6%;
+    
+    --glass: 210 40% 98% / 0.7;
+    --glass-border: 220 15% 6% / 0.1;
+    --glass-hover: 210 40% 95% / 0.9;
+    
+    --primary: 166 86% 63%;
+    --primary-foreground: 220 15% 6%;
+    
+    --card: 210 40% 98% / 0.8;
+    --card-foreground: 220 15% 6%;
+    --card-border: 220 15% 6% / 0.1;
+    
+    --border: 220 15% 6% / 0.1;
+    --input: 210 40% 95% / 0.8;
   }
 }
 
