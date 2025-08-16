@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
-import { User, Shield, Palette, Globe, MessageSquare, X } from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
+import { User, Shield, Palette, Globe, MessageSquare, X, Settings, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface SettingsSidebarProps {
@@ -11,7 +11,7 @@ const settingsCategories = [
   {
     title: "User Settings",
     items: [
-      { id: "my-account", label: "My Account", icon: User },
+      { id: "my-account", label: "My Account", icon: Settings },
       { id: "user-profile", label: "User Profile", icon: User },
     ]
   },
@@ -21,6 +21,7 @@ const settingsCategories = [
       { id: "appearance", label: "Appearance", icon: Palette },
       { id: "language", label: "Language & Region", icon: Globe },
       { id: "chat", label: "Chat Settings", icon: MessageSquare },
+      { id: "notifications", label: "Notifications", icon: Bell },
     ]
   },
   {
@@ -32,6 +33,9 @@ const settingsCategories = [
 ];
 
 export function SettingsSidebar({ onClose, className }: SettingsSidebarProps) {
+  const location = useLocation();
+  const currentHash = location.hash.replace('#', '') || 'my-account';
+
   return (
     <div className={`w-60 bg-glass-light border-r border-white/10 h-full flex flex-col ${className}`}>
       <div className="p-4 border-b border-white/10">
@@ -54,21 +58,25 @@ export function SettingsSidebar({ onClose, className }: SettingsSidebarProps) {
             <div className="space-y-1">
               {category.items.map(item => {
                 const IconComponent = item.icon;
+                const isActive = currentHash === item.id;
                 return (
-                  <NavLink
+                  <a
                     key={item.id}
-                    to={`/settings#${item.id}`}
-                    className={({ isActive }) => 
-                      `flex items-center gap-3 px-2 py-2 rounded text-sm transition-colors ${
-                        isActive 
-                          ? "bg-primary text-primary-foreground" 
-                          : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                      }`
-                    }
+                    href={`#${item.id}`}
+                    className={`flex items-center gap-3 px-2 py-2 rounded text-sm transition-colors ${
+                      isActive 
+                        ? "bg-primary text-primary-foreground" 
+                        : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                    }`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.hash = item.id;
+                      window.dispatchEvent(new HashChangeEvent('hashchange'));
+                    }}
                   >
                     <IconComponent className="h-4 w-4" />
                     {item.label}
-                  </NavLink>
+                  </a>
                 );
               })}
             </div>

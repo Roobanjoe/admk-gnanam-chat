@@ -12,10 +12,12 @@ import { useTheme } from "next-themes";
 import { Sun, Moon, Monitor, User, Mail, Shield, Trash2 } from "lucide-react";
 import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { ProfileUpload } from "@/components/settings/ProfileUpload";
+import { AuthenticationSection } from "@/components/settings/AuthenticationSection";
+import { NotificationSettings } from "@/components/settings/NotificationSettings";
 import { useProfile } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
-// Logo will be added later when available
+import { useToast } from "@/hooks/use-toast";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const Settings = () => {
   const [language, setLanguage] = useState<Language>("en");
@@ -63,10 +65,19 @@ const Settings = () => {
 
   useEffect(() => {
     // Update active section based on URL hash
-    const hash = window.location.hash.replace('#', '');
-    if (hash) {
-      setActiveSection(hash);
-    }
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        setActiveSection(hash);
+      }
+    };
+
+    // Set initial section
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const themeOptions = [
@@ -134,36 +145,7 @@ const Settings = () => {
   const renderContent = () => {
     switch (activeSection) {
       case "my-account":
-        return (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Mail className="h-5 w-5" />
-                  Account Information
-                </CardTitle>
-                <CardDescription>
-                  Manage your account settings and preferences
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    disabled
-                    className="bg-muted"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Email changes are not currently supported
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        );
+        return <AuthenticationSection email={email} />;
 
       case "user-profile":
         return (
@@ -338,6 +320,9 @@ const Settings = () => {
           </div>
         );
 
+      case "notifications":
+        return <NotificationSettings />;
+
       case "privacy":
         return (
           <div className="space-y-6">
@@ -360,9 +345,25 @@ const Settings = () => {
                       <p className="text-sm text-muted-foreground">
                         Permanently delete all your chat conversations. This action cannot be undone.
                       </p>
-                      <Button variant="destructive" onClick={clearChatHistory}>
-                        Clear All History
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive">Clear All History</Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Clear Chat History?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will permanently delete all your chat conversations. This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={clearChatHistory} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                              Clear History
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </div>
                 </div>
