@@ -116,7 +116,8 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-8 pb-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background-secondary to-background-tertiary" />
+        <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background-secondary/20 to-background-tertiary/30 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-br from-glass-light/40 via-transparent to-glass-light/20 animate-pulse" style={{ animationDuration: '4s' }} />
         
         <div className="relative container mx-auto px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center pt-12 lg:pt-20">
