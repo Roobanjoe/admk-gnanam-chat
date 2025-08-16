@@ -129,7 +129,14 @@ const Index = () => {
             </div>
             
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl mb-6 leading-tight">
-              <span className="text-neon">{t("heroTitle")}</span>
+              <span className="text-neon flex items-center justify-center gap-4">
+                <img 
+                  src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
+                  alt="chatADMK Logo" 
+                  className="w-16 lg:w-20 h-16 lg:h-20 rounded-xl shadow-neon"
+                />
+                Chatadmk
+              </span>
             </h1>
             
             <p className="text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
