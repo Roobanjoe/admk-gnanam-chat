@@ -144,10 +144,14 @@ export type Database = {
       }
       user_settings: {
         Row: {
+          chat_notifications: boolean | null
           created_at: string
           default_language: string
+          email_notifications: boolean | null
           id: string
           max_tokens: number | null
+          push_notifications: boolean | null
+          security_alerts: boolean | null
           temperature: number | null
           theme: string | null
           tn_party_only: boolean | null
@@ -155,10 +159,14 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          chat_notifications?: boolean | null
           created_at?: string
           default_language?: string
+          email_notifications?: boolean | null
           id?: string
           max_tokens?: number | null
+          push_notifications?: boolean | null
+          security_alerts?: boolean | null
           temperature?: number | null
           theme?: string | null
           tn_party_only?: boolean | null
@@ -166,10 +174,14 @@ export type Database = {
           user_id: string
         }
         Update: {
+          chat_notifications?: boolean | null
           created_at?: string
           default_language?: string
+          email_notifications?: boolean | null
           id?: string
           max_tokens?: number | null
+          push_notifications?: boolean | null
+          security_alerts?: boolean | null
           temperature?: number | null
           theme?: string | null
           tn_party_only?: boolean | null

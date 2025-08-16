@@ -43,12 +43,12 @@ export function NotificationSettings() {
       if (error && error.code !== 'PGRST116') throw error;
 
       if (data) {
-        // Map database fields to local state
+        // Map database fields to local state - handle missing properties gracefully
         setSettings({
-          email_notifications: data.email_notifications ?? true,
-          push_notifications: data.push_notifications ?? false,
-          chat_notifications: data.chat_notifications ?? true,
-          security_alerts: data.security_alerts ?? true
+          email_notifications: (data as any).email_notifications ?? true,
+          push_notifications: (data as any).push_notifications ?? false,
+          chat_notifications: (data as any).chat_notifications ?? true,
+          security_alerts: (data as any).security_alerts ?? true
         });
       }
     } catch (error) {
