@@ -36,6 +36,7 @@ export default {
 				// Glass system
 				glass: {
 					DEFAULT: 'hsl(var(--glass))',
+					light: 'hsl(var(--glass-light))',
 					border: 'hsl(var(--glass-border))',
 					hover: 'hsl(var(--glass-hover))'
 				},
@@ -110,6 +111,7 @@ export default {
 				'neon': 'var(--shadow-neon)',
 				'glass': 'var(--shadow-glass)',
 				'elevated': 'var(--shadow-elevated)',
+				'soft': 'var(--shadow-soft)',
 			},
 			backdropBlur: {
 				'glass': '20px',
