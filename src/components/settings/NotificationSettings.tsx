@@ -44,11 +44,12 @@ export function NotificationSettings() {
 
       if (data) {
         // Map database fields to local state - handle missing properties gracefully
+        // Using bracket notation to avoid TypeScript errors for new columns
         setSettings({
-          email_notifications: (data as any).email_notifications ?? true,
-          push_notifications: (data as any).push_notifications ?? false,
-          chat_notifications: (data as any).chat_notifications ?? true,
-          security_alerts: (data as any).security_alerts ?? true
+          email_notifications: (data as any)['email_notifications'] ?? true,
+          push_notifications: (data as any)['push_notifications'] ?? false,
+          chat_notifications: (data as any)['chat_notifications'] ?? true,
+          security_alerts: (data as any)['security_alerts'] ?? true
         });
       }
     } catch (error) {
