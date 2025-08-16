@@ -47,7 +47,7 @@ const Leaders = () => {
       name: language === "en" ? "C. N. Annadurai" : "சி. என். அண்ணாதுரை",
       title: language === "en" ? "Founder of Dravidian Movement" : "திராவிட இயக்கத்தின் நிறுவனர்",
       period: "1909 - 1969",
-      image: cnAnnaduraiImg,
+      image: "/lovable-uploads/e1d58dd2-9cba-4d26-8e84-88974cb0d694.png",
       description: language === "en"
         ? "Known as 'Anna' (Elder Brother), C.N. Annadurai was a pioneering leader of the Dravidian movement and served as the Chief Minister of Tamil Nadu from 1967 to 1969."
         : "'அண்ணா' (மூத்த சகோதரன்) என்று அறியப்பட்ட சி.என். அண்ணாதுரை திராவிட இயக்கத்தின் முன்னோடி தலைவர் மற்றும் 1967 முதல் 1969 வரை தமிழ்நாட்டின் முதலமைச்சராக பணியாற்றினார்",
