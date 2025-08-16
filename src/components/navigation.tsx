@@ -40,8 +40,7 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
   ]
 
   const protectedItems = user ? [
-    { href: "/app", icon: MessageSquare, label: t("chat") },
-    { href: "/settings", icon: Settings, label: t("settings") }
+    { href: "/app", icon: MessageSquare, label: t("chat") }
   ] : []
 
   const allItems = [...navItems, ...protectedItems]

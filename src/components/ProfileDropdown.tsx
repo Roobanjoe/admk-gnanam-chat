@@ -31,17 +31,13 @@ export function ProfileDropdown({ user, onSignOut, language }: ProfileDropdownPr
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center space-x-2 p-1 rounded-full hover:bg-glass-hover transition-all duration-300 group">
+        <button className="p-1 rounded-full hover:bg-glass-hover transition-all duration-300 group">
           <Avatar className="h-8 w-8 border-2 border-neon/20 group-hover:border-neon/40 transition-colors">
             <AvatarImage src={profile?.avatar_url} alt={displayName} />
             <AvatarFallback className="bg-gradient-neon text-primary-foreground text-xs font-semibold">
               {initials}
             </AvatarFallback>
           </Avatar>
-          <div className="hidden md:block text-left">
-            <p className="text-sm font-medium text-foreground line-clamp-1">{displayName}</p>
-            <p className="text-xs text-muted-foreground">Online</p>
-          </div>
         </button>
       </PopoverTrigger>
       
