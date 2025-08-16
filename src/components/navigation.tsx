@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { LanguageToggle, useTranslation, type Language } from "@/components/language-toggle"
 import { GlassCard } from "@/components/ui/glass-card"
+import { ProfileDropdown } from "@/components/ProfileDropdown"
 import { 
   Home, 
   Info, 
@@ -90,14 +91,11 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
               />
               
               {user ? (
-                <EnhancedButton
-                  variant="glass"
-                  size="sm"
-                  onClick={onSignOut}
-                >
-                  <LogOut className="w-4 h-4" />
-                  {t("signOut")}
-                </EnhancedButton>
+                <ProfileDropdown 
+                  user={user} 
+                  onSignOut={onSignOut} 
+                  language={language} 
+                />
               ) : (
                 <Link to="/auth">
                   <EnhancedButton variant="neon" size="sm">
@@ -164,17 +162,13 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
                     />
                     
                     {user ? (
-                      <EnhancedButton
-                        variant="glass"
-                        size="sm"
-                        onClick={() => {
-                          onSignOut?.()
-                          setIsMobileMenuOpen(false)
-                        }}
-                      >
-                        <LogOut className="w-4 h-4" />
-                        {t("signOut")}
-                      </EnhancedButton>
+                      <div onClick={() => setIsMobileMenuOpen(false)}>
+                        <ProfileDropdown 
+                          user={user} 
+                          onSignOut={onSignOut} 
+                          language={language} 
+                        />
+                      </div>
                     ) : (
                       <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
                         <EnhancedButton variant="neon" size="sm">
