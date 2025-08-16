@@ -44,7 +44,7 @@ export const translations = {
     signOut: "Sign Out",
     
     // Hero section
-    heroTitle: "AIADMK Knowledge Platform",
+    heroTitle: "AIADMK",
     heroSubtitle: "Empowering Tamil Nadu through Technology & Tradition",
     startChat: "Start Chat",
     learnMore: "Learn More",
@@ -98,7 +98,7 @@ export const translations = {
     signOut: "வெளியேறு",
     
     // Hero section
-    heroTitle: "அ.இ.அ.த.மு.க அறிவு தளம்",
+    heroTitle: "அ.இ.அ.த.மு.க",
     heroSubtitle: "தொழில்நுட்பம் மற்றும் பாரம்பரியத்தின் மூலம் தமிழ்நாட்டை வளர்த்தல்",
     startChat: "அரட்டை தொடங்கு",
     learnMore: "மேலும் அறிய",
