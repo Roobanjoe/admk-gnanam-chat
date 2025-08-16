@@ -133,7 +133,7 @@ const Index = () => {
                 <img 
                   src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
                   alt="chatADMK Logo" 
-                  className="w-16 lg:w-20 h-16 lg:h-20 rounded-xl shadow-neon"
+                  className="w-16 lg:w-20 h-16 lg:h-20 rounded-xl bg-white/90 p-2 shadow-[0_0_20px_rgba(255,255,255,0.5),0_0_40px_rgba(0,255,255,0.3),0_0_60px_rgba(0,255,255,0.1)] backdrop-blur-sm border border-white/20"
                 />
                 Chatadmk
               </span>
