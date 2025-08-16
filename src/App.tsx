@@ -21,7 +21,7 @@ const App = () => (
       <TooltipProvider>
         <ParticleBackground 
           colors={["#1e40af", "#7c3aed", "#dc2626"]}
-          particleCount={80}
+          particleCount={150}
           particleSize={3}
           speed={0.5}
           interactionRadius={120}
