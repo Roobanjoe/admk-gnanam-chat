@@ -86,7 +86,7 @@ const Leaders = () => {
       name: language === "en" ? "Edappadi K. Palaniswami" : "எடப்பாடி கே. பழனிசாமி",
       title: language === "en" ? "Current General Secretary" : "தற்போதைய பொதுச் செயலாளர்",
       period: "1954 - Present",
-      image: edappadiPalaniswamiImg,
+      image: "/lovable-uploads/37803aec-9a29-4b46-8d2a-14d6870b2138.png",
       description: language === "en"
         ? "A seasoned politician and administrator who served as Chief Minister and is currently leading the party as General Secretary."
         : "முதலமைச்சராக பணியாற்றிய அனுபவமிக்க அரசியல்வாதி மற்றும் நிர்வாகி, தற்போது கட்சியின் பொதுச் செயலாளராக தலைமை தாங்குகிறார்",
