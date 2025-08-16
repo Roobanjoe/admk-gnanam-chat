@@ -60,7 +60,7 @@ const Leaders = () => {
       name: language === "en" ? "M. G. Ramachandran" : "எம். ஜி. ராமச்சந்திரன்",
       title: language === "en" ? "Founder of AIADMK" : "அ.இ.அ.த.மு.க நிறுவனர்",
       period: "1917 - 1987",
-      image: mgRamachandranImg,
+      image: "/lovable-uploads/aa084626-b12f-46b6-926d-29c179d3e9c8.png",
       description: language === "en"
         ? "Popularly known as MGR, he was an actor-turned-politician who founded AIADMK in 1972 and served as Tamil Nadu's Chief Minister for ten years."
         : "எம்ஜிஆர் என்று பிரபலமாக அழைக்கப்பட்ட அவர் நடிகரிலிருந்து அரசியல்வாதியானவர், 1972 இல் அ.இ.அ.த.மு.க-ஐ நிறுவியவர் மற்றும் பத்து ஆண்டுகள் தமிழ்நாட்டின் முதலமைச்சராக பணியாற்றியவர்",
