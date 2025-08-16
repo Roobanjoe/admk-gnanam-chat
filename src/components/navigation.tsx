@@ -36,14 +36,12 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
     { href: "/", icon: Home, label: t("home") },
     { href: "/about", icon: Info, label: t("about") },
     { href: "/leaders", icon: Users, label: t("leaders") },
-    { href: "/elections", icon: Vote, label: t("elections") },
-    { href: "/manifestos", icon: FileText, label: t("manifestos") }
+    { href: "/elections", icon: Vote, label: t("elections") }
   ]
 
   const protectedItems = user ? [
     { href: "/app", icon: MessageSquare, label: t("chat") },
-    { href: "/settings", icon: Settings, label: t("settings") },
-    { href: "/knowledge", icon: BookOpen, label: t("knowledge") }
+    { href: "/settings", icon: Settings, label: t("settings") }
   ] : []
 
   const allItems = [...navItems, ...protectedItems]
@@ -53,42 +51,44 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="hidden lg:block fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-glass border-b border-glass-border">
-        <div className="container mx-auto px-6 py-4">
+      <nav className="hidden md:block fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-glass border-b border-glass-border">
+        <div className="container mx-auto px-4 lg:px-6 py-3 lg:py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 bg-gradient-neon rounded-xl flex items-center justify-center shadow-neon group-hover:shadow-neon group-hover:scale-110 transition-all duration-300">
-                <span className="text-primary-foreground font-display font-bold text-lg">அ</span>
+            <Link to="/" className="flex items-center space-x-2 lg:space-x-3 group flex-shrink-0">
+              <div className="w-8 lg:w-10 h-8 lg:h-10 bg-gradient-neon rounded-xl flex items-center justify-center shadow-neon group-hover:shadow-neon group-hover:scale-110 transition-all duration-300">
+                <span className="text-primary-foreground font-display font-bold text-sm lg:text-lg">அ</span>
               </div>
-              <span className="font-display font-bold text-xl text-neon">AIADMK</span>
+              <span className="font-display font-bold text-lg lg:text-xl text-neon">AIADMK</span>
             </Link>
 
             {/* Navigation Links */}
-            <div className="flex items-center space-x-1">
+            <div className="hidden xl:flex items-center space-x-1 flex-1 justify-center max-w-2xl">
               {allItems.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   className={cn(
-                    "flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all duration-300",
+                    "flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm lg:text-base",
                     isActive(item.href)
                       ? "bg-neon/20 text-neon shadow-neon"
                       : "text-muted-foreground hover:text-neon hover:bg-glass-hover"
                   )}
                 >
                   <item.icon className="w-4 h-4" />
-                  <span>{item.label}</span>
+                  <span className="whitespace-nowrap">{item.label}</span>
                 </Link>
               ))}
             </div>
 
             {/* Right Side */}
-            <div className="flex items-center space-x-3">
-              <LanguageToggle 
-                language={language} 
-                onLanguageChange={onLanguageChange} 
-              />
+            <div className="flex items-center space-x-2 lg:space-x-3 flex-shrink-0">
+              <div className="hidden sm:block">
+                <LanguageToggle 
+                  language={language} 
+                  onLanguageChange={onLanguageChange} 
+                />
+              </div>
               
               {user ? (
                 <ProfileDropdown 
@@ -100,7 +100,7 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
                 <Link to="/auth">
                   <EnhancedButton variant="neon" size="sm">
                     <LogIn className="w-4 h-4" />
-                    {t("signIn")}
+                    <span className="hidden sm:inline">{t("signIn")}</span>
                   </EnhancedButton>
                 </Link>
               )}
@@ -110,59 +110,72 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-glass border-b border-glass-border">
-        <div className="px-4 py-3">
+      <nav className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-glass border-b border-glass-border">
+        <div className="px-3 sm:px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-neon rounded-lg flex items-center justify-center shadow-neon">
-                <span className="text-primary-foreground font-display font-bold text-sm">அ</span>
+            <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
+              <div className="w-7 sm:w-8 h-7 sm:h-8 bg-gradient-neon rounded-lg flex items-center justify-center shadow-neon">
+                <span className="text-primary-foreground font-display font-bold text-xs sm:text-sm">அ</span>
               </div>
-              <span className="font-display font-bold text-lg text-neon">AIADMK</span>
+              <span className="font-display font-bold text-base sm:text-lg text-neon">AIADMK</span>
             </Link>
 
-            {/* Mobile Menu Button */}
-            <EnhancedButton
-              variant="glass"
-              size="sm"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-            </EnhancedButton>
+            {/* Right Side - Mobile */}
+            <div className="flex items-center space-x-2">
+              <div className="sm:hidden">
+                <LanguageToggle 
+                  language={language} 
+                  onLanguageChange={onLanguageChange} 
+                />
+              </div>
+              
+              {/* Mobile Menu Button */}
+              <EnhancedButton
+                variant="glass"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2"
+              >
+                {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              </EnhancedButton>
+            </div>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-glass border-b border-glass-border">
-            <GlassCard variant="minimal" padding="sm" className="m-4 rounded-2xl">
-              <div className="space-y-2">
+          <div className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-glass border-b border-glass-border max-h-[calc(100vh-4rem)] overflow-y-auto">
+            <GlassCard variant="minimal" padding="sm" className="m-3 sm:m-4 rounded-2xl">
+              <div className="space-y-1">
                 {allItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      "flex items-center space-x-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 w-full",
+                      "flex items-center space-x-3 px-3 sm:px-4 py-3 rounded-xl font-medium transition-all duration-300 w-full text-sm sm:text-base",
                       isActive(item.href)
                         ? "bg-neon/20 text-neon"
                         : "text-muted-foreground hover:text-neon hover:bg-glass-hover"
                     )}
                   >
-                    <item.icon className="w-4 h-4" />
+                    <item.icon className="w-4 h-4 flex-shrink-0" />
                     <span>{item.label}</span>
                   </Link>
                 ))}
                 
                 <div className="border-t border-glass-border pt-3 mt-3">
-                  <div className="flex items-center justify-between px-4 py-2">
-                    <LanguageToggle 
-                      language={language} 
-                      onLanguageChange={onLanguageChange} 
-                    />
+                  <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 px-3 sm:px-4 py-2">
+                    <div className="hidden sm:block">
+                      <LanguageToggle 
+                        language={language} 
+                        onLanguageChange={onLanguageChange} 
+                      />
+                    </div>
                     
                     {user ? (
-                      <div onClick={() => setIsMobileMenuOpen(false)}>
+                      <div onClick={() => setIsMobileMenuOpen(false)} className="w-full sm:w-auto">
                         <ProfileDropdown 
                           user={user} 
                           onSignOut={onSignOut} 
@@ -170,8 +183,8 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
                         />
                       </div>
                     ) : (
-                      <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
-                        <EnhancedButton variant="neon" size="sm">
+                      <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)} className="w-full sm:w-auto">
+                        <EnhancedButton variant="neon" size="sm" className="w-full sm:w-auto">
                           <LogIn className="w-4 h-4" />
                           {t("signIn")}
                         </EnhancedButton>
@@ -186,7 +199,7 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
       </nav>
 
       {/* Spacer for fixed navigation */}
-      <div className="h-16 lg:h-20" />
+      <div className="h-14 sm:h-16 md:h-18 lg:h-20" />
     </>
   )
 }
