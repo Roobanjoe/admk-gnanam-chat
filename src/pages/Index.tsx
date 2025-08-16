@@ -106,7 +106,7 @@ const Index = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-hero">
+    <div className="min-h-screen">
       <Navigation 
         user={user}
         onSignOut={handleSignOut}

@@ -98,7 +98,7 @@ const Leaders = () => {
 
   if (selectedLeader) {
     return (
-      <div className="min-h-screen bg-gradient-hero">
+      <div className="min-h-screen">
         <Navigation 
           user={user}
           onSignOut={handleSignOut}
@@ -173,7 +173,7 @@ const Leaders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-hero">
+    <div className="min-h-screen">
       <Navigation 
         user={user}
         onSignOut={handleSignOut}

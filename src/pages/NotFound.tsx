@@ -11,7 +11,7 @@ const NotFound = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-hero">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="text-center space-y-6">
         <BackButton className="mb-8" />
         <h1 className="text-6xl font-bold text-neon">404</h1>
