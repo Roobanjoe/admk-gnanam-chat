@@ -73,7 +73,7 @@ const Leaders = () => {
       name: language === "en" ? "J. Jayalalithaa" : "ஜே. ஜெயலலிதா",
       title: language === "en" ? "Iron Lady of Tamil Nadu" : "தமிழ்நாட்டின் இரும்பு பெண்",
       period: "1948 - 2016",
-      image: jJayalalithaaImg,
+      image: "/lovable-uploads/903e2f1f-62f2-4423-a729-8e88b8c0346e.png",
       description: language === "en"
         ? "Known as 'Amma' (Mother), J. Jayalalithaa was a charismatic leader who served as Chief Minister for over 14 years and championed women's rights."
         : "'அம்மா' (தாய்) என்று அறியப்பட்ட ஜே. ஜெயலலிதா 14 ஆண்டுகளுக்கும் மேலாக முதலமைச்சராக பணியாற்றிய கவர்ச்சிமிக்க தலைவர் மற்றும் பெண்கள் உரிமைகளுக்காக போராடியவர்",
