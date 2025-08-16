@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Navigation } from "@/components/navigation"
 import { GlassCard, GlassCardHeader, GlassCardTitle, GlassCardContent } from "@/components/ui/glass-card"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
+import { BackButton } from "@/components/ui/back-button"
 import { useTranslation, type Language } from "@/components/language-toggle"
 import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
@@ -181,6 +182,7 @@ const Leaders = () => {
       />
 
       <div className="container mx-auto px-6 lg:px-8 py-12">
+        <BackButton className="mb-4" />
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="font-display font-bold text-4xl lg:text-5xl mb-6 text-neon">

@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/ui/back-button";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Monitor, Settings as SettingsIcon } from "lucide-react";
 
@@ -23,6 +24,7 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
+        <BackButton className="mb-4" />
         <div className="flex items-center gap-3 mb-8">
           <SettingsIcon className="h-8 w-8 text-primary" />
           <h1 className="text-4xl font-bold">{t("settings")}</h1>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Navigation } from "@/components/navigation";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/ui/back-button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslation, type Language } from "@/components/language-toggle";
@@ -98,6 +99,7 @@ const Chat = () => {
       />
 
       <div className="container mx-auto px-6 lg:px-8 pt-24">
+        <BackButton className="mb-4" />
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="font-display font-bold text-3xl lg:text-4xl mb-4 text-neon">
