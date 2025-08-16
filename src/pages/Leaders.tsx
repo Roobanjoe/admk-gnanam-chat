@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 import { User, Calendar, Award, ArrowRight } from "lucide-react"
 
-// Import leader images
+// Import leader images - updated
 import cnAnnaduraiImg from "@/assets/leaders/cn-annadurai.jpg"
 import mgRamachandranImg from "@/assets/leaders/mg-ramachandran.jpg"
 import jJayalalithaaImg from "@/assets/leaders/j-jayalalithaa.jpg"
