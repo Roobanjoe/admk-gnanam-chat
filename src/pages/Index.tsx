@@ -127,94 +127,65 @@ const Index = () => {
         onLanguageChange={setLanguage}
       />
 
-      {/* Professional Hero Section */}
-      <section className="relative overflow-hidden min-h-screen flex items-center justify-center professional-hero">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-neon rounded-full animate-pulse" style={{ animationDelay: '0s' }} />
-          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-neon/60 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute bottom-1/3 left-1/2 w-1.5 h-1.5 bg-neon/80 rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
-        </div>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden pt-8 pb-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-background/30 via-background-secondary/20 to-background-tertiary/30 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-br from-glass-light/40 via-transparent to-glass-light/20 animate-pulse" style={{ animationDuration: '4s' }} />
         
         <div className="relative container mx-auto px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Professional Badge */}
-            <div className="inline-flex items-center space-x-2 bg-neon/5 border border-neon/20 rounded-full px-6 py-3 mb-8 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-neon rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-neon/80 uppercase tracking-wider">
-                {language === "en" ? "I can search new contacts" : "புதிய தொடர்புகளை தேடலாம்"}
+          <div className="max-w-4xl mx-auto text-center pt-12 lg:pt-20">
+            <div className="inline-flex items-center space-x-2 bg-neon/10 border border-neon/20 rounded-full px-4 py-2 mb-8">
+              <Sparkles className="w-4 h-4 text-neon" />
+              <span className="text-sm font-medium text-neon">
+                {language === "en" ? "Powered by AI Technology" : "AI தொழில்நுட்பத்தால் இயக்கப்படுகிறது"}
               </span>
             </div>
             
-            {/* Main Heading */}
-            <h1 className="font-display font-bold text-5xl sm:text-6xl lg:text-8xl mb-8 leading-tight">
-              <div className="mb-4">
-                <span className="gradient-text">
-                  {language === "en" ? "What Can I Do" : "நான் என்ன செய்ய"}
-                </span>
-              </div>
-              <div className="text-foreground/90">
-                {language === "en" ? "for You Today?" : "முடியும் இன்று?"}
-              </div>
+            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl mb-6 leading-tight">
+              <span className="text-neon flex items-center justify-center gap-4">
+                <img 
+                  src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
+                  alt="chatADMK Logo" 
+                  className="w-16 lg:w-20 h-16 lg:h-20 rounded-xl bg-white/90 p-2 shadow-[0_0_20px_rgba(255,255,255,0.5),0_0_40px_rgba(0,255,255,0.3),0_0_60px_rgba(0,255,255,0.1)] backdrop-blur-sm border border-white/20"
+                />
+                Chatadmk
+              </span>
             </h1>
             
-            {/* Subtitle */}
-            <p className="text-xl lg:text-2xl text-muted-foreground mb-16 max-w-3xl mx-auto leading-relaxed opacity-80">
-              {language === "en" 
-                ? "Your intelligent AI assistant for AIADMK knowledge, ready to help with information, guidance, and insights."
-                : "அ.இ.அ.த.மு.க அறிவுக்கான உங்கள் அறிவார்ந்த AI உதவியாளர், தகவல், வழிகாட்டுதல் மற்றும் நுண்ணறிவுகளுடன் உதவ தயார்."
-              }
+            <p className="text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+              {t("heroSubtitle")}
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
               <EnhancedButton 
                 variant="hero" 
                 size="xl" 
-                className="group shadow-professional" 
+                className="group" 
                 onClick={handleStartChat}
               >
                 <MessageSquare className="w-5 h-5" />
-                {language === "en" ? "Start Conversation" : "உரையாடல் தொடங்கு"}
+                {t("startChat")}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </EnhancedButton>
               
               <Link to="/about">
-                <EnhancedButton variant="glow" size="xl" className="shadow-neon">
-                  {language === "en" ? "Explore Features" : "அம்சங்களை ஆராயுங்கள்"}
+                <EnhancedButton variant="glow" size="xl">
+                  {t("learnMore")}
                 </EnhancedButton>
               </Link>
             </div>
 
-            {/* Glowing Orb Animation */}
-            <div className="relative flex justify-center items-center">
-              <div className="glowing-orb w-32 h-32 rounded-full shadow-orb relative">
-                <div className="absolute inset-4 bg-neon/20 rounded-full backdrop-blur-sm border border-neon/30">
-                  <div className="absolute inset-3 bg-neon/10 rounded-full border border-neon/20">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Sparkles className="w-6 h-6 text-neon animate-spin" style={{ animationDuration: '8s' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Stats Section - Professional Dashboard Style */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-16">
+            {/* Stats Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-20">
               {stats.map((stat, index) => (
-                <GlassCard key={index} variant="neon" padding="lg" className="text-center group hover:scale-105 transition-all duration-500 relative overflow-hidden">
-                  {/* Background glow effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-neon/20 rounded-full blur-xl" />
-                  </div>
-                  
-                  <div className="relative flex flex-col items-center space-y-4">
-                    <div className="w-16 h-16 bg-gradient-professional rounded-2xl flex items-center justify-center group-hover:shadow-professional transition-all duration-500 border border-neon/20">
-                      <stat.icon className="w-8 h-8 text-neon group-hover:scale-110 transition-transform duration-300" />
+                <GlassCard key={index} variant="neon" padding="lg" className="text-center group hover:scale-105 transition-all duration-300">
+                  <div className="flex flex-col items-center space-y-3">
+                    <div className="w-12 h-12 bg-neon/20 rounded-xl flex items-center justify-center group-hover:bg-neon/30 transition-colors">
+                      <stat.icon className="w-6 h-6 text-neon" />
                     </div>
-                    <div className="space-y-2">
-                      <div className="text-4xl font-display font-bold gradient-text">{stat.value}</div>
-                      <div className="text-sm text-muted-foreground/80 font-medium uppercase tracking-wider">{stat.label}</div>
+                    <div className="space-y-1">
+                      <div className="text-3xl font-display font-bold text-neon">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
                     </div>
                   </div>
                 </GlassCard>
@@ -224,29 +195,22 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Enhanced Features Section */}
-      <section className="py-24 px-6 lg:px-8 relative">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-20 left-20 w-1 h-1 bg-neon rounded-full animate-pulse" style={{ animationDelay: '0s' }} />
-          <div className="absolute top-40 right-32 w-1 h-1 bg-neon rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute bottom-32 left-1/3 w-1 h-1 bg-neon rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
-        </div>
-        
-        <div className="container mx-auto relative">
-          <div className="text-center mb-20">
-            <h2 className="font-display font-bold text-4xl lg:text-5xl mb-6 gradient-text">
+      {/* Features Section */}
+      <section className="py-20 px-6 lg:px-8">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-display font-bold text-3xl lg:text-4xl mb-4 text-neon">
               {t("featuredSections")}
             </h2>
-            <p className="text-xl text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {language === "en" 
-                ? "Explore comprehensive information about AIADMK's history, leadership, and vision through our advanced AI-powered platform"
-                : "எங்கள் மேம்பட்ட AI-இயங்கும் தளத்தின் மூலம் அ.இ.அ.த.மு.க-வின் வரலாறு, தலைமை மற்றும் பார்வை பற்றிய விரிவான தகவல்களை அறியுங்கள்"
+                ? "Explore comprehensive information about AIADMK's history, leadership, and vision"
+                : "அ.இ.அ.த.மு.க-வின் வரலாறு, தலைமை மற்றும் பார்வை பற்றிய விரிவான தகவல்களை அறியுங்கள்"
               }
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <div key={index} className="group">
                 {feature.title.includes("AI Chat") || feature.title.includes("AI அரட்டை") ? (
@@ -256,29 +220,24 @@ const Index = () => {
                   >
                     <GlassCard
                       variant="default"
-                      className="h-full group-hover:scale-105 transition-all duration-500 relative overflow-hidden border-neon/20 hover:border-neon/40 hover:shadow-professional"
+                      className="h-full group-hover:scale-105 transition-all duration-300"
                     >
-                      {/* Feature highlight effect */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon to-transparent" />
-                      </div>
-                      
-                      <GlassCardHeader className="relative">
-                        <div className={`w-14 h-14 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:shadow-professional transition-all duration-500 border border-neon/30`}>
-                          <feature.icon className="w-7 h-7 text-neon group-hover:scale-110 transition-transform duration-300" />
+                      <GlassCardHeader>
+                        <div className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-4 group-hover:shadow-neon transition-shadow`}>
+                          <feature.icon className="w-6 h-6 text-neon" />
                         </div>
-                        <GlassCardTitle className="text-xl mb-3 gradient-text">{feature.title}</GlassCardTitle>
-                        <GlassCardDescription className="text-muted-foreground/80 leading-relaxed">{feature.description}</GlassCardDescription>
+                        <GlassCardTitle className="text-lg">{feature.title}</GlassCardTitle>
+                        <GlassCardDescription>{feature.description}</GlassCardDescription>
                       </GlassCardHeader>
                       <GlassCardContent>
-                        <div className="flex items-center text-neon group-hover:text-neon/90 transition-colors">
-                          <span className="text-sm font-medium uppercase tracking-wider">
+                        <div className="flex items-center text-neon group-hover:text-neon/80 transition-colors">
+                          <span className="text-sm font-medium">
                             {!user 
                               ? (language === "en" ? "Sign in to chat" : "அரட்டையிட உள்நுழையுங்கள்")
                               : (language === "en" ? "Start Chat" : "அரட்டை தொடங்கு")
                             }
                           </span>
-                          <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-2 transition-transform duration-300" />
+                          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </GlassCardContent>
                     </GlassCard>
@@ -287,26 +246,21 @@ const Index = () => {
                   <Link to={feature.href}>
                     <GlassCard
                       variant="default"
-                      className="h-full group-hover:scale-105 transition-all duration-500 cursor-pointer relative overflow-hidden border-glass-border/50 hover:border-neon/30 hover:shadow-neon"
+                      className="h-full group-hover:scale-105 transition-all duration-300 cursor-pointer"
                     >
-                      {/* Feature highlight effect */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon/50 to-transparent" />
-                      </div>
-                      
-                      <GlassCardHeader className="relative">
-                        <div className={`w-14 h-14 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:shadow-neon transition-all duration-500 border border-neon/20`}>
-                          <feature.icon className="w-7 h-7 text-neon group-hover:scale-110 transition-transform duration-300" />
+                      <GlassCardHeader>
+                        <div className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-4 group-hover:shadow-neon transition-shadow`}>
+                          <feature.icon className="w-6 h-6 text-neon" />
                         </div>
-                        <GlassCardTitle className="text-xl mb-3">{feature.title}</GlassCardTitle>
-                        <GlassCardDescription className="text-muted-foreground/80 leading-relaxed">{feature.description}</GlassCardDescription>
+                        <GlassCardTitle className="text-lg">{feature.title}</GlassCardTitle>
+                        <GlassCardDescription>{feature.description}</GlassCardDescription>
                       </GlassCardHeader>
                       <GlassCardContent>
-                        <div className="flex items-center text-neon group-hover:text-neon/90 transition-colors">
-                          <span className="text-sm font-medium uppercase tracking-wider">
+                        <div className="flex items-center text-neon group-hover:text-neon/80 transition-colors">
+                          <span className="text-sm font-medium">
                             {language === "en" ? "Explore" : "ஆராயுங்கள்"}
                           </span>
-                          <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-2 transition-transform duration-300" />
+                          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </GlassCardContent>
                     </GlassCard>
