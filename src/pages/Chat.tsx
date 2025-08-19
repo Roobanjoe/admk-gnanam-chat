@@ -71,40 +71,34 @@ const Chat = () => {
     setInputMessage("");
     setIsLoading(true);
 
-    try {
-      const { data, error } = await supabase.functions.invoke('chat-with-ai', {
-        body: { message: messageText, language }
-      });
+    // Simple local responses about AIADMK
+    setTimeout(() => {
+      const responses = language === "en" ? [
+        "Thank you for your question about AIADMK! The All India Anna Dravida Munnetra Kazhagam was founded in 1972 by M. G. Ramachandran.",
+        "AIADMK has been a major political force in Tamil Nadu, focusing on social welfare and development programs.",
+        "The party has been led by prominent leaders like M. G. Ramachandran and J. Jayalalithaa, who made significant contributions to Tamil Nadu's progress.",
+        "AIADMK's key policies include women empowerment, education, healthcare, and industrial development in Tamil Nadu.",
+        "The party symbol is Two Leaves and has a strong grassroots connection with the people of Tamil Nadu."
+      ] : [
+        "அ.இ.அ.த.மு.க பற்றிய உங்கள் கேள்விக்கு நன்றி! அகில இந்திய அண்ணா திராவிட முன்னேற்றக் கழகம் 1972ல் எம்.ஜி.ராமச்சந்திரனால் நிறுவப்பட்டது.",
+        "அ.இ.அ.த.மு.க தமிழ்நாட்டில் ஒரு முக்கிய அரசியல் சக்தியாக இருந்து, சமூக நலன் மற்றும் வளர்ச்சித் திட்டங்களில் கவனம் செலுத்துகிறது.",
+        "எம்.ஜி.ராமச்சந்திரன் மற்றும் ஜே.ஜெயலலிதா போன்ற முன்னணி தலைவர்களால் இக்கட்சி வழிநடத்தப்பட்டது.",
+        "அ.இ.அ.த.மு.க.வின் முக்கிய கொள்கைகள் பெண்கள் நலன், கல்வி, சுகாதாரம் மற்றும் தமிழ்நாட்டில் தொழில்துறை வளர்ச்சி ஆகும்.",
+        "கட்சியின் சின்னம் இரு இலைகள் மற்றும் தமிழ்நாடு மக்களுடன் வலுவான தொடர்பு கொண்டுள்ளது."
+      ];
 
-      if (error) {
-        console.error('Error calling AI:', error);
-        throw error;
-      }
-
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response || (language === "en" 
-          ? "I'm sorry, I couldn't process your message right now."
-          : "மன்னிக்கவும், இப்போது உங்கள் செய்தியை செயலாக்க முடியவில்லை."),
+        text: randomResponse,
         sender: "bot",
         timestamp: new Date(),
       };
       
       setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: language === "en" 
-          ? "I'm sorry, there was an error processing your message. Please try again."
-          : "மன்னிக்கவும், உங்கள் செய்தியைப் பதிவுசெய்வதில் பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.",
-        sender: "bot",
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   if (!user) {
