@@ -4,6 +4,7 @@ import { BackButton } from "@/components/ui/back-button";
 import { useTranslation, type Language } from "@/components/language-toggle";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { GlassCard } from "@/components/ui/glass-card";
 
 const Chat = () => {
   const [user, setUser] = useState<any>(null);
@@ -31,36 +32,6 @@ const Chat = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    // Load Botpress webchat scripts
-    const loadBotpressScripts = () => {
-      // Remove any existing Botpress scripts
-      const existingScripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]');
-      existingScripts.forEach(script => script.remove());
-
-      // Load the main webchat script
-      const webchatScript = document.createElement('script');
-      webchatScript.src = 'https://cdn.botpress.cloud/webchat/v3.2/inject.js';
-      webchatScript.async = true;
-      document.head.appendChild(webchatScript);
-
-      // Load the configuration script
-      const configScript = document.createElement('script');
-      configScript.src = 'https://files.bpcontent.cloud/2025/08/16/09/20250816095926-GX2MELSP.js';
-      configScript.defer = true;
-      document.head.appendChild(configScript);
-    };
-
-    if (user) {
-      loadBotpressScripts();
-    }
-
-    return () => {
-      // Cleanup scripts when component unmounts
-      const botpressScripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]');
-      botpressScripts.forEach(script => script.remove());
-    };
-  }, [user]);
 
   const handleSignOut = async () => {
     try {
@@ -100,17 +71,17 @@ const Chat = () => {
             </p>
           </div>
 
-          {/* Botpress Chat Widget will be embedded here automatically */}
-          <div className="flex justify-center">
-            <div className="w-full max-w-4xl">
-              <div className="text-center text-muted-foreground">
-                {language === "en" 
-                  ? "Chat widget loading..."
-                  : "அரட்டை விட்ஜெட் ஏற்றப்படுகிறது..."
-                }
-              </div>
+          {/* Beautiful Botpress Chat Container */}
+          <GlassCard variant="neon" className="w-full max-w-4xl mx-auto h-[600px] overflow-hidden">
+            <div className="h-full w-full rounded-lg overflow-hidden border border-glass-border">
+              <iframe
+                src="https://cdn.botpress.cloud/webchat/v3.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/08/16/09/20250816095926-HXID0BCT.json"
+                className="w-full h-full border-0"
+                allow="microphone; camera"
+                title={language === "en" ? "AI Chat Assistant" : "AI அரட்டை உதவியாளர்"}
+              />
             </div>
-          </div>
+          </GlassCard>
         </div>
       </div>
     </div>
