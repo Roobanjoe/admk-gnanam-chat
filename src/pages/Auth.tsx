@@ -109,7 +109,7 @@ const Auth = () => {
             </GlassCardTitle>
             <GlassCardDescription>
               {isLogin 
-                ? (language === "en" ? "Welcome back to AIADMK Knowledge Platform" : "அ.இ.அ.த.மு.க அறிவு தளத்திற்கு வரவேற்கிறோம்")
+                ? (language === "en" ? "Welcome back to CHATADMK" : "அ.இ.அ.த.மு.க அறிவு தளத்திற்கு வரவேற்கிறோம்")
                 : (language === "en" ? "Create your account to get started" : "தொடங்க உங்கள் கணக்கை உருவாக்குங்கள்")
               }
             </GlassCardDescription>
