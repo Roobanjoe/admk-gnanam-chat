@@ -70,10 +70,10 @@ const Chat = () => {
   const getContainerHeight = () => {
     if (isFullscreen) return "h-screen";
     switch (containerSize) {
-      case "compact": return "h-[60vh]";
-      case "standard": return "h-[80vh]";
-      case "expanded": return "h-[90vh]";
-      default: return "h-[80vh]";
+      case "compact": return "h-[75vh]";
+      case "standard": return "h-[85vh]";
+      case "expanded": return "h-[95vh]";
+      default: return "h-[85vh]";
     }
   };
 
@@ -81,7 +81,7 @@ const Chat = () => {
     if (isFullscreen) {
       return "fixed inset-0 z-50 w-screen h-screen";
     }
-    return `w-[80%] mx-auto ${getContainerHeight()}`;
+    return `w-[90%] max-w-6xl mx-auto ${getContainerHeight()}`;
   };
 
   if (!user) {
@@ -96,7 +96,7 @@ const Chat = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Navigation 
         user={user}
         onSignOut={handleSignOut}
@@ -104,30 +104,16 @@ const Chat = () => {
         onLanguageChange={setLanguage}
       />
 
-      <div className={isFullscreen ? "" : "container mx-auto px-2 pt-16"}>
-        {!isFullscreen && <BackButton className="mb-2" />}
+      <div className={isFullscreen ? "flex-1" : "flex-1 flex flex-col justify-center px-2 py-4"}>
+        {!isFullscreen && <BackButton className="absolute top-20 left-4 z-10" />}
         
-        <div className={isFullscreen ? "" : ""}>
-          {!isFullscreen && (
-            <div className="text-center mb-4">
-              <h1 className="font-display font-bold text-2xl lg:text-3xl mb-2 text-neon">
-                {language === "en" ? "AI Chat Assistant" : "AI அரட்டை உதவியாளர்"}
-              </h1>
-              <p className="text-sm text-muted-foreground mb-4">
-                {language === "en" 
-                  ? "Ask questions about AIADMK history, policies, and more"
-                  : "அ.இ.அ.த.மு.க வரலாறு, கொள்கைகள் மற்றும் பலவற்றைப் பற்றி கேள்விகளைக் கேளுங்கள்"
-                }
-              </p>
-            </div>
-          )}
-
+        <div className="flex-1 flex items-center justify-center">
           {/* Enhanced Botpress Chat Container */}
           <GlassCard variant={containerVariant} className={`${getContainerClass()} overflow-hidden transition-all duration-500`}>
-            <GlassCardHeader className="flex flex-row items-center justify-between p-4 border-b border-glass-border">
+            <GlassCardHeader className="flex flex-row items-center justify-between p-3 border-b border-glass-border">
               <div className="flex items-center space-x-3">
                 <GlassCardTitle className="text-lg font-semibold">
-                  {language === "en" ? "AI Chat Assistant" : "AI அரட்டை உதவியாளர்"}
+                  {language === "en" ? "AIADMK Information Assistant" : "அ.இ.அ.த.மு.க தகவல் உதவியாளர்"}
                 </GlassCardTitle>
                 <Badge variant={isConnected ? "default" : "secondary"} className="text-xs">
                   {isConnected 
@@ -174,15 +160,15 @@ const Chat = () => {
                     <DropdownMenuContent>
                       <DropdownMenuItem onClick={() => setContainerSize("compact")}>
                         <Smartphone className="h-4 w-4 mr-2" />
-                        Compact (400px)
+                        Compact (75vh)
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setContainerSize("standard")}>
                         <Monitor className="h-4 w-4 mr-2" />
-                        Standard (600px)
+                        Standard (85vh)
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setContainerSize("expanded")}>
                         <Square className="h-4 w-4 mr-2" />
-                        Expanded (800px)
+                        Expanded (95vh)
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -200,7 +186,7 @@ const Chat = () => {
               </div>
             </GlassCardHeader>
 
-            <GlassCardContent className="p-0 relative">
+            <GlassCardContent className="p-0 relative flex-1">
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-10">
                   <div className="flex flex-col items-center space-y-4">
@@ -218,7 +204,7 @@ const Chat = () => {
                   src="https://cdn.botpress.cloud/webchat/v3.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/08/16/09/20250816095926-HXID0BCT.json"
                   className="w-full h-full border-0"
                   allow="microphone; camera"
-                  title={language === "en" ? "AI Chat Assistant" : "AI அரட்டை உதவியாளர்"}
+                  title={language === "en" ? "AIADMK Information Assistant" : "அ.இ.அ.த.மு.க தகவல் உதவியாளர்"}
                   onLoad={handleIframeLoad}
                   onError={() => {
                     setIsLoading(false);
@@ -229,7 +215,7 @@ const Chat = () => {
               </div>
             </GlassCardContent>
 
-            <GlassCardFooter className="p-3 border-t border-glass-border">
+            <GlassCardFooter className="p-2 border-t border-glass-border flex-shrink-0">
               <div className="flex items-center justify-between w-full text-xs text-muted-foreground">
                 <div className="flex items-center space-x-2">
                   <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
