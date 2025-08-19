@@ -24,12 +24,12 @@ interface ParticleBackgroundProps {
 }
 
 export default function ParticleBackground({
-  particleCount = 80,
-  colors = ["#1e40af", "#7c3aed", "#dc2626"],
-  particleSize = 2,
-  speed = 0.5,
-  interactionRadius = 100,
-  interactionStrength = 0.02,
+  particleCount = 120,
+  colors = ["#00ffaa", "#00ccaa", "#22ff88"],
+  particleSize = 1.5,
+  speed = 0.3,
+  interactionRadius = 150,
+  interactionStrength = 0.015,
   interactionType = 'attract'
 }: ParticleBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -123,38 +123,64 @@ export default function ParticleBackground({
     ctx.clearRect(0, 0, width, height);
     
     const particles = particlesRef.current;
+    const mouse = mouseRef.current;
     
-    particles.forEach(particle => {
-      ctx.beginPath();
-      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-      ctx.fillStyle = particle.color;
-      ctx.globalAlpha = particle.opacity;
-      ctx.fill();
-      
-      // Add subtle glow effect
-      ctx.shadowColor = particle.color;
-      ctx.shadowBlur = particle.size * 2;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    });
-
-    // Draw connection lines between nearby particles
-    ctx.globalAlpha = 0.1;
+    // Draw connection lines between nearby particles (enhanced network effect)
+    ctx.globalAlpha = 0.3;
     particles.forEach((particle, i) => {
       particles.slice(i + 1).forEach(otherParticle => {
         const dx = particle.x - otherParticle.x;
         const dy = particle.y - otherParticle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 100) {
+        if (distance < 120) {
+          const alpha = 1 - (distance / 120);
+          ctx.globalAlpha = alpha * 0.4;
+          
+          // Create gradient for lines
+          const gradient = ctx.createLinearGradient(
+            particle.x, particle.y, 
+            otherParticle.x, otherParticle.y
+          );
+          gradient.addColorStop(0, particle.color);
+          gradient.addColorStop(1, otherParticle.color);
+          
           ctx.beginPath();
           ctx.moveTo(particle.x, particle.y);
           ctx.lineTo(otherParticle.x, otherParticle.y);
-          ctx.strokeStyle = particle.color;
-          ctx.lineWidth = 0.5;
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = alpha * 1.5;
           ctx.stroke();
         }
       });
+    });
+
+    // Draw particles with enhanced glow
+    particles.forEach(particle => {
+      const mouseDistance = Math.sqrt(
+        (mouse.x - particle.x) ** 2 + (mouse.y - particle.y) ** 2
+      );
+      const isNearMouse = mouseDistance < interactionRadius;
+      
+      ctx.globalAlpha = particle.opacity;
+      
+      // Enhanced glow effect
+      ctx.shadowColor = particle.color;
+      ctx.shadowBlur = isNearMouse ? particle.size * 8 : particle.size * 4;
+      
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+      ctx.fillStyle = particle.color;
+      ctx.fill();
+      
+      // Additional inner glow for nodes
+      if (isNearMouse) {
+        ctx.globalAlpha = 0.8;
+        ctx.shadowBlur = particle.size * 12;
+        ctx.fill();
+      }
+      
+      ctx.shadowBlur = 0;
     });
   };
 
