@@ -22,6 +22,7 @@ import heroImage from "@/assets/hero-banner.jpg"
 const Index = () => {
   const [user, setUser] = useState<any>(null)
   const [language, setLanguage] = useState<Language>("en")
+  const [isChatLoaded, setIsChatLoaded] = useState(false)
   const { t } = useTranslation(language)
 
   useEffect(() => {
@@ -38,6 +39,33 @@ const Index = () => {
     return () => subscription.unsubscribe()
   }, [])
 
+  // Load Botpress chatbot scripts
+  useEffect(() => {
+    if (!isChatLoaded) return
+
+    // Remove any existing Botpress scripts
+    const existingScripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]')
+    existingScripts.forEach(script => script.remove())
+
+    // Load the main webchat script
+    const webchatScript = document.createElement('script')
+    webchatScript.src = 'https://cdn.botpress.cloud/webchat/v3.2/inject.js'
+    webchatScript.async = true
+    document.head.appendChild(webchatScript)
+
+    // Load the configuration script
+    const configScript = document.createElement('script')
+    configScript.src = 'https://files.bpcontent.cloud/2025/08/16/09/20250816095926-GX2MELSP.js'
+    configScript.defer = true
+    document.head.appendChild(configScript)
+
+    return () => {
+      // Cleanup scripts when component unmounts
+      const botpressScripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]')
+      botpressScripts.forEach(script => script.remove())
+    }
+  }, [isChatLoaded])
+
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut()
@@ -45,6 +73,18 @@ const Index = () => {
     } catch (error: any) {
       toast.error("Error signing out: " + error.message)
     }
+  }
+
+  const handleStartChat = () => {
+    if (!user) {
+      // Redirect to auth if not logged in
+      window.location.href = '/auth'
+      return
+    }
+    
+    // Load and trigger the chatbot
+    setIsChatLoaded(true)
+    toast.success(language === "en" ? "Chat loading..." : "அரட்டை ஏற்றப்படுகிறது...")
   }
 
   const features = [
@@ -144,23 +184,16 @@ const Index = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-              {user ? (
-                <Link to="/app">
-                  <EnhancedButton variant="hero" size="xl" className="group">
-                    <MessageSquare className="w-5 h-5" />
-                    {t("startChat")}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </EnhancedButton>
-                </Link>
-              ) : (
-                <Link to="/auth">
-                  <EnhancedButton variant="hero" size="xl" className="group">
-                    <MessageSquare className="w-5 h-5" />
-                    {t("startChat")}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </EnhancedButton>
-                </Link>
-              )}
+              <EnhancedButton 
+                variant="hero" 
+                size="xl" 
+                className="group" 
+                onClick={handleStartChat}
+              >
+                <MessageSquare className="w-5 h-5" />
+                {t("startChat")}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </EnhancedButton>
               
               <Link to="/about">
                 <EnhancedButton variant="glow" size="xl">
@@ -207,11 +240,14 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <div key={index} className="group">
-                {feature.protected && !user ? (
-                  <Link to="/auth">
+                {feature.title.includes("AI Chat") || feature.title.includes("AI அரட்டை") ? (
+                  <div 
+                    className="cursor-pointer" 
+                    onClick={handleStartChat}
+                  >
                     <GlassCard
                       variant="default"
-                      className="h-full group-hover:scale-105 transition-all duration-300 cursor-pointer"
+                      className="h-full group-hover:scale-105 transition-all duration-300"
                     >
                       <GlassCardHeader>
                         <div className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-4 group-hover:shadow-neon transition-shadow`}>
@@ -223,13 +259,16 @@ const Index = () => {
                       <GlassCardContent>
                         <div className="flex items-center text-neon group-hover:text-neon/80 transition-colors">
                           <span className="text-sm font-medium">
-                            {language === "en" ? "Sign in to access" : "அணுக உள்நுழையுங்கள்"}
+                            {!user 
+                              ? (language === "en" ? "Sign in to chat" : "அரட்டையிட உள்நுழையுங்கள்")
+                              : (language === "en" ? "Start Chat" : "அரட்டை தொடங்கு")
+                            }
                           </span>
                           <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </GlassCardContent>
                     </GlassCard>
-                  </Link>
+                  </div>
                 ) : (
                   <Link to={feature.href}>
                     <GlassCard
