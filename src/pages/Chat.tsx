@@ -67,22 +67,42 @@ const Chat = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageText = inputMessage;
     setInputMessage("");
     setIsLoading(true);
 
-    // Simulate bot response (replace with actual AI integration later)
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke('chat-with-botpress', {
+        body: { message: messageText }
+      });
+
+      if (error) {
+        console.error('Error calling Botpress:', error);
+        throw error;
+      }
+
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: language === "en" 
-          ? "Thank you for your message! This is a placeholder response. AI integration will be added soon."
-          : "உங்கள் செய்திக்கு நன்றி! இது ஒரு இடஒதுக்கீடு பதில். AI ஒருங்கிணைப்பு விரைவில் சேர்க்கப்படும்.",
+        text: data.response || "I'm sorry, I couldn't process your message right now.",
         sender: "bot",
         timestamp: new Date(),
       };
+      
       setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: language === "en" 
+          ? "I'm sorry, there was an error processing your message. Please try again."
+          : "மன்னிக்கவும், உங்கள் செய்தியைப் பதிவுசெய்வதில் பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   if (!user) {
