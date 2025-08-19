@@ -5,15 +5,6 @@ import { useTranslation, type Language } from "@/components/language-toggle";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-declare global {
-  interface Window {
-    botpressWebChat: {
-      init: (config: any) => void;
-      onEvent: (callback: (event: any) => void, filter?: any) => void;
-    };
-  }
-}
-
 const Chat = () => {
   const [user, setUser] = useState<any>(null);
   const [language, setLanguage] = useState<Language>("en");
@@ -41,48 +32,33 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    // Load Botpress webchat script
-    const loadBotpress = () => {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.botpress.cloud/webchat/v2.2/inject.js';
-      script.async = true;
-      script.onload = () => {
-        if (window.botpressWebChat && import.meta.env.VITE_BOTPRESS_CLIENT_ID) {
-          window.botpressWebChat.init({
-            clientId: import.meta.env.VITE_BOTPRESS_CLIENT_ID,
-            hostUrl: 'https://cdn.botpress.cloud/webchat/v2.2',
-            messagingUrl: 'https://messaging.botpress.cloud',
-            botName: 'AIADMK Assistant',
-            website: {
-              title: 'AIADMK Chat',
-              link: window.location.origin
-            },
-            theme: 'prism',
-            themeName: 'prism',
-            stylesheet: 'https://webchat-styler-css.botpress.app/prod/code/f66f1988-19d4-4a16-ab70-e7cc69c271fc/v92847/style.css',
-            frontendVersion: 'v1',
-            useSessionStorage: true,
-            enableConversationDeletion: true,
-            showPoweredBy: true,
-            className: 'webchatIframe',
-            containerWidth: '100%25',
-            layoutWidth: '100%25'
-          });
-        }
-      };
-      document.body.appendChild(script);
+    // Load Botpress webchat scripts
+    const loadBotpressScripts = () => {
+      // Remove any existing Botpress scripts
+      const existingScripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]');
+      existingScripts.forEach(script => script.remove());
+
+      // Load the main webchat script
+      const webchatScript = document.createElement('script');
+      webchatScript.src = 'https://cdn.botpress.cloud/webchat/v3.2/inject.js';
+      webchatScript.async = true;
+      document.head.appendChild(webchatScript);
+
+      // Load the configuration script
+      const configScript = document.createElement('script');
+      configScript.src = 'https://files.bpcontent.cloud/2025/08/16/09/20250816095926-GX2MELSP.js';
+      configScript.defer = true;
+      document.head.appendChild(configScript);
     };
 
     if (user) {
-      loadBotpress();
+      loadBotpressScripts();
     }
 
     return () => {
-      // Cleanup script if needed
-      const existingScript = document.querySelector('script[src*="botpress"]');
-      if (existingScript) {
-        existingScript.remove();
-      }
+      // Cleanup scripts when component unmounts
+      const botpressScripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]');
+      botpressScripts.forEach(script => script.remove());
     };
   }, [user]);
 
@@ -122,24 +98,16 @@ const Chat = () => {
                 : "அ.இ.அ.த.மு.க வரலாறு, கொள்கைகள் மற்றும் பலவற்றைப் பற்றி கேள்விகளைக் கேளுங்கள்"
               }
             </p>
-            
-            {/* Botpress Chat Widget Container */}
-            <div className="flex justify-center">
-              <div 
-                id="botpress-webchat-container" 
-                className="w-full max-w-lg h-[600px] border border-glass-border rounded-lg shadow-lg bg-card"
-                style={{ minHeight: '600px' }}
-              >
-                {!import.meta.env.VITE_BOTPRESS_CLIENT_ID && (
-                  <div className="flex items-center justify-center h-full">
-                    <p className="text-muted-foreground">
-                      {language === "en" 
-                        ? "Botpress Client ID not configured"
-                        : "Botpress வாடிக்கையாளர் ID கட்டமைக்கப்படவில்லை"
-                      }
-                    </p>
-                  </div>
-                )}
+          </div>
+
+          {/* Botpress Chat Widget will be embedded here automatically */}
+          <div className="flex justify-center">
+            <div className="w-full max-w-4xl">
+              <div className="text-center text-muted-foreground">
+                {language === "en" 
+                  ? "Chat widget loading..."
+                  : "அரட்டை விட்ஜெட் ஏற்றப்படுகிறது..."
+                }
               </div>
             </div>
           </div>
