@@ -1,6 +1,5 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -15,12 +14,12 @@ serve(async (req) => {
   try {
     const { message } = await req.json();
     
-    const botId = Deno.env.get('BOTPRESS_BOT_ID');
-    const integrationToken = Deno.env.get('BOTPRESS_INTEGRATION_TOKEN');
+    // Use the Bot ID and Integration Token directly from secrets
+    const botId = 'f66f1988-19d4-4a16-ab70-e7cc69c271fc';
+    const integrationToken = 'bp_bak_xdA700eAawggx0r7cyNI4pR_jN-m-TS-iMmg';
     
-    if (!botId || !integrationToken) {
-      throw new Error('Botpress credentials not configured');
-    }
+    console.log('Bot ID:', botId);
+    console.log('Using Botpress integration for message:', message);
 
     console.log('Sending message to Botpress:', message);
 
