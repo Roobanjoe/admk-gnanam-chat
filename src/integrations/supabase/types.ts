@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      contact_submissions: {
+        Row: {
+          botpress_user_id: string | null
+          conversation_id: string | null
+          created_at: string
+          department: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          priority: string | null
+          source: string | null
+          status: string | null
+          subject: string
+          ticket_id: string
+          updated_at: string
+        }
+        Insert: {
+          botpress_user_id?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          department?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          priority?: string | null
+          source?: string | null
+          status?: string | null
+          subject: string
+          ticket_id: string
+          updated_at?: string
+        }
+        Update: {
+          botpress_user_id?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          priority?: string | null
+          source?: string | null
+          status?: string | null
+          subject?: string
+          ticket_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           created_at: string
@@ -76,6 +130,51 @@ export type Database = {
           owner_user_id?: string | null
           status?: string | null
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          botpress_user_id: string | null
+          conversation_id: string | null
+          created_at: string
+          email: string
+          id: string
+          lead_id: string
+          message: string | null
+          name: string
+          phone: string | null
+          source: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          botpress_user_id?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          lead_id: string
+          message?: string | null
+          name: string
+          phone?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          botpress_user_id?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          lead_id?: string
+          message?: string | null
+          name?: string
+          phone?: string | null
+          source?: string | null
+          status?: string | null
           updated_at?: string
         }
         Relationships: []

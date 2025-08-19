@@ -68,3 +68,12 @@ inspector_port = 54331
 
 [functions.chat-with-botpress]
 verify_jwt = false
+
+[functions.create-lead]
+verify_jwt = false
+
+[functions.contact-form]
+verify_jwt = false
+
+[functions.check-status]
+verify_jwt = false
