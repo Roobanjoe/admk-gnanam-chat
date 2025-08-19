@@ -39,9 +39,7 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
     { href: "/elections", icon: Vote, label: t("elections") }
   ]
 
-  const protectedItems = user ? [
-    { href: "/app", icon: MessageSquare, label: t("chat") }
-  ] : []
+  const protectedItems: never[] = []
 
   const allItems = [...navItems, ...protectedItems]
 
