@@ -72,18 +72,20 @@ const Chat = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('chat-with-botpress', {
-        body: { message: messageText }
+      const { data, error } = await supabase.functions.invoke('chat-with-ai', {
+        body: { message: messageText, language }
       });
 
       if (error) {
-        console.error('Error calling Botpress:', error);
+        console.error('Error calling AI:', error);
         throw error;
       }
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response || "I'm sorry, I couldn't process your message right now.",
+        text: data.response || (language === "en" 
+          ? "I'm sorry, I couldn't process your message right now."
+          : "மன்னிக்கவும், இப்போது உங்கள் செய்தியை செயலாக்க முடியவில்லை."),
         sender: "bot",
         timestamp: new Date(),
       };
