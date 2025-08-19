@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Navigation } from "@/components/navigation"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle, GlassCardDescription } from "@/components/ui/glass-card"
@@ -22,7 +22,7 @@ import heroImage from "@/assets/hero-banner.jpg"
 const Index = () => {
   const [user, setUser] = useState<any>(null)
   const [language, setLanguage] = useState<Language>("en")
-  const [isChatLoaded, setIsChatLoaded] = useState(false)
+  const navigate = useNavigate()
   const { t } = useTranslation(language)
 
   useEffect(() => {
@@ -39,32 +39,6 @@ const Index = () => {
     return () => subscription.unsubscribe()
   }, [])
 
-  // Load Botpress chatbot scripts
-  useEffect(() => {
-    if (!isChatLoaded) return
-
-    // Remove any existing Botpress scripts
-    const existingScripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]')
-    existingScripts.forEach(script => script.remove())
-
-    // Load the main webchat script
-    const webchatScript = document.createElement('script')
-    webchatScript.src = 'https://cdn.botpress.cloud/webchat/v3.2/inject.js'
-    webchatScript.async = true
-    document.head.appendChild(webchatScript)
-
-    // Load the configuration script
-    const configScript = document.createElement('script')
-    configScript.src = 'https://files.bpcontent.cloud/2025/08/16/09/20250816095926-GX2MELSP.js'
-    configScript.defer = true
-    document.head.appendChild(configScript)
-
-    return () => {
-      // Cleanup scripts when component unmounts
-      const botpressScripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]')
-      botpressScripts.forEach(script => script.remove())
-    }
-  }, [isChatLoaded])
 
   const handleSignOut = async () => {
     try {
@@ -78,13 +52,12 @@ const Index = () => {
   const handleStartChat = () => {
     if (!user) {
       // Redirect to auth if not logged in
-      window.location.href = '/auth'
+      navigate('/auth')
       return
     }
     
-    // Load and trigger the chatbot
-    setIsChatLoaded(true)
-    toast.success(language === "en" ? "Chat loading..." : "அரட்டை ஏற்றப்படுகிறது...")
+    // Navigate to chat page
+    navigate('/app')
   }
 
   const features = [
