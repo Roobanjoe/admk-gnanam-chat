@@ -70,10 +70,10 @@ const Chat = () => {
   const getContainerHeight = () => {
     if (isFullscreen) return "h-screen";
     switch (containerSize) {
-      case "compact": return "h-[400px]";
-      case "standard": return "h-[600px]";
-      case "expanded": return "h-[800px]";
-      default: return "h-[600px]";
+      case "compact": return "h-[60vh]";
+      case "standard": return "h-[80vh]";
+      case "expanded": return "h-[90vh]";
+      default: return "h-[80vh]";
     }
   };
 
@@ -81,7 +81,7 @@ const Chat = () => {
     if (isFullscreen) {
       return "fixed inset-0 z-50 w-screen h-screen";
     }
-    return `w-full max-w-4xl mx-auto ${getContainerHeight()}`;
+    return `w-[80%] mx-auto ${getContainerHeight()}`;
   };
 
   if (!user) {
@@ -104,16 +104,16 @@ const Chat = () => {
         onLanguageChange={setLanguage}
       />
 
-      <div className={isFullscreen ? "" : "container mx-auto px-6 lg:px-8 pt-24"}>
-        {!isFullscreen && <BackButton className="mb-4" />}
+      <div className={isFullscreen ? "" : "container mx-auto px-2 pt-16"}>
+        {!isFullscreen && <BackButton className="mb-2" />}
         
-        <div className={isFullscreen ? "" : "max-w-4xl mx-auto"}>
+        <div className={isFullscreen ? "" : ""}>
           {!isFullscreen && (
-            <div className="text-center mb-8">
-              <h1 className="font-display font-bold text-3xl lg:text-4xl mb-4 text-neon">
+            <div className="text-center mb-4">
+              <h1 className="font-display font-bold text-2xl lg:text-3xl mb-2 text-neon">
                 {language === "en" ? "AI Chat Assistant" : "AI அரட்டை உதவியாளர்"}
               </h1>
-              <p className="text-lg text-muted-foreground mb-8">
+              <p className="text-sm text-muted-foreground mb-4">
                 {language === "en" 
                   ? "Ask questions about AIADMK history, policies, and more"
                   : "அ.இ.அ.த.மு.க வரலாறு, கொள்கைகள் மற்றும் பலவற்றைப் பற்றி கேள்விகளைக் கேளுங்கள்"
