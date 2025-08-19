@@ -12,6 +12,7 @@ import Leaders from "./pages/Leaders";
 import Elections from "./pages/Elections";
 import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
+import LogoUtility from "./pages/LogoUtility";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/elections" element={<Elections />} />
             <Route path="/app" element={<Chat />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/logo-utility" element={<LogoUtility />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
