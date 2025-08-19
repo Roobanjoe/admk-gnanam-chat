@@ -100,8 +100,8 @@ const Auth = () => {
         <GlassCard variant="elevated" padding="lg">
           <GlassCardHeader className="text-center">
             <img 
-              src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
-              alt="chatADMK Logo" 
+              src="/lovable-uploads/8ccb2411-1bf4-432d-8590-fbdd08ec8027.png" 
+              alt="AIADMK Logo" 
               className="w-16 h-16 rounded-xl shadow-[0_0_20px_rgba(0,255,255,0.4),0_0_40px_rgba(0,255,255,0.2)] mx-auto mb-4"
             />
             <GlassCardTitle className="text-2xl">

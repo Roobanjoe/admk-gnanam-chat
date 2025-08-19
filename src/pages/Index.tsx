@@ -143,8 +143,8 @@ const Index = () => {
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl mb-6 leading-tight">
               <span className="text-neon flex items-center justify-center gap-4">
                 <img 
-                  src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
-                  alt="chatADMK Logo" 
+                  src="/lovable-uploads/8ccb2411-1bf4-432d-8590-fbdd08ec8027.png" 
+                  alt="AIADMK Logo" 
                   className="w-16 lg:w-20 h-16 lg:h-20 rounded-xl shadow-[0_0_20px_rgba(0,255,255,0.4),0_0_40px_rgba(0,255,255,0.2)]"
                 />
                 Chatadmk
