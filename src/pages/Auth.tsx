@@ -99,9 +99,11 @@ const Auth = () => {
 
         <GlassCard variant="elevated" padding="lg">
           <GlassCardHeader className="text-center">
-            <div className="w-16 h-16 bg-gradient-neon rounded-2xl flex items-center justify-center shadow-neon mx-auto mb-4">
-              <span className="text-primary-foreground font-display font-bold text-2xl">அ</span>
-            </div>
+            <img 
+              src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
+              alt="chatADMK Logo" 
+              className="w-16 h-16 rounded-xl shadow-[0_0_20px_rgba(0,255,255,0.4),0_0_40px_rgba(0,255,255,0.2)] mx-auto mb-4"
+            />
             <GlassCardTitle className="text-2xl">
               {isLogin ? t("login") : t("signup")}
             </GlassCardTitle>
