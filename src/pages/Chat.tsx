@@ -123,7 +123,7 @@ const Chat = () => {
           )}
 
           {/* Enhanced Botpress Chat Container */}
-          <GlassCard variant={containerVariant} className={`${getContainerClass()} overflow-hidden transition-all duration-500 ${isConnected ? 'animate-pulse' : ''}`}>
+          <GlassCard variant={containerVariant} className={`${getContainerClass()} overflow-hidden transition-all duration-500`}>
             <GlassCardHeader className="flex flex-row items-center justify-between p-4 border-b border-glass-border">
               <div className="flex items-center space-x-3">
                 <GlassCardTitle className="text-lg font-semibold">
