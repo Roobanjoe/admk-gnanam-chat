@@ -109,10 +109,10 @@ const Chat = () => {
         
         <div className="flex-1 flex items-center justify-center">
           {/* Enhanced Botpress Chat Container */}
-          <GlassCard variant={containerVariant} className={`${getContainerClass()} overflow-hidden transition-all duration-500`}>
-            <GlassCardHeader className="flex flex-row items-center justify-between p-3 border-b border-glass-border">
-              <div className="flex items-center space-x-3">
-                <GlassCardTitle className="text-lg font-semibold">
+          <GlassCard variant={containerVariant} className={`${getContainerClass()} overflow-hidden transition-all duration-500 flex flex-col`}>
+            <GlassCardHeader className="flex flex-row items-center justify-between p-2 border-b border-glass-border flex-shrink-0 h-[10%]">
+              <div className="flex items-center space-x-2">
+                <GlassCardTitle className="text-sm font-semibold">
                   {language === "en" ? "AIADMK Information Assistant" : "அ.இ.அ.த.மு.க தகவல் உதவியாளர்"}
                 </GlassCardTitle>
                 <Badge variant={isConnected ? "default" : "secondary"} className="text-xs">
@@ -123,12 +123,12 @@ const Chat = () => {
                 </Badge>
               </div>
               
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
                 {/* Theme Selector */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <EnhancedButton variant="ghost" size="sm">
-                      <Palette className="h-4 w-4" />
+                      <Palette className="h-3 w-3" />
                     </EnhancedButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
@@ -152,9 +152,9 @@ const Chat = () => {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <EnhancedButton variant="ghost" size="sm">
-                        {containerSize === "compact" && <Smartphone className="h-4 w-4" />}
-                        {containerSize === "standard" && <Monitor className="h-4 w-4" />}
-                        {containerSize === "expanded" && <Square className="h-4 w-4" />}
+                        {containerSize === "compact" && <Smartphone className="h-3 w-3" />}
+                        {containerSize === "standard" && <Monitor className="h-3 w-3" />}
+                        {containerSize === "expanded" && <Square className="h-3 w-3" />}
                       </EnhancedButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -176,17 +176,17 @@ const Chat = () => {
 
                 {/* Refresh Button */}
                 <EnhancedButton variant="ghost" size="sm" onClick={handleRefreshChat}>
-                  <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`h-3 w-3 ${isLoading ? 'animate-spin' : ''}`} />
                 </EnhancedButton>
 
                 {/* Fullscreen Toggle */}
                 <EnhancedButton variant="ghost" size="sm" onClick={toggleFullscreen}>
-                  {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                  {isFullscreen ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
                 </EnhancedButton>
               </div>
             </GlassCardHeader>
 
-            <GlassCardContent className="p-0 relative flex-1">
+            <GlassCardContent className="p-0 relative h-[80%] flex-grow">
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-10">
                   <div className="flex flex-col items-center space-y-4">
@@ -215,7 +215,7 @@ const Chat = () => {
               </div>
             </GlassCardContent>
 
-            <GlassCardFooter className="p-2 border-t border-glass-border flex-shrink-0">
+            <GlassCardFooter className="p-2 border-t border-glass-border flex-shrink-0 h-[10%]">
               <div className="flex items-center justify-between w-full text-xs text-muted-foreground">
                 <div className="flex items-center space-x-2">
                   <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
