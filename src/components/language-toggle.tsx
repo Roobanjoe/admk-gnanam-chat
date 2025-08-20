@@ -56,11 +56,12 @@ export const translations = {
     partyManifestos: "Party Manifestos",
     
     // Auth
-    email: "Email",
-    password: "Password",
-    login: "Login",
-    signup: "Sign Up",
-    loginWithGoogle: "Login with Google",
+    phone: "Phone Number",
+    enterPhone: "Enter your phone number",
+    sendOTP: "Send OTP",
+    verifyOTP: "Verify OTP",
+    otpSent: "OTP sent to your phone",
+    resendOTP: "Resend OTP",
     
     // Chat
     newConversation: "New Conversation",
@@ -110,11 +111,12 @@ export const translations = {
     partyManifestos: "கட்சி அறிக்கைகள்",
     
     // Auth
-    email: "மின்னஞ்சல்",
-    password: "கடவுச்சொல்",
-    login: "உள்நுழை",
-    signup: "பதிவு செய்",
-    loginWithGoogle: "Google உடன் உள்நுழை",
+    phone: "தொலைபேசி எண்",
+    enterPhone: "உங்கள் தொலைபேசி எண்ணை உள்ளிடுங்கள்",
+    sendOTP: "OTP அனுப்பு",
+    verifyOTP: "OTP சரிபார்",
+    otpSent: "OTP உங்கள் தொலைபேசிக்கு அனுப்பப்பட்டது",
+    resendOTP: "OTP மீண்டும் அனுப்பு",
     
     // Chat
     newConversation: "புதிய உரையாடல்",

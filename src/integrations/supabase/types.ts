@@ -211,6 +211,36 @@ export type Database = {
           },
         ]
       }
+      phone_otps: {
+        Row: {
+          attempts: number | null
+          created_at: string
+          expires_at: string
+          id: string
+          otp_code: string
+          phone_number: string
+          verified: boolean | null
+        }
+        Insert: {
+          attempts?: number | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          otp_code: string
+          phone_number: string
+          verified?: boolean | null
+        }
+        Update: {
+          attempts?: number | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          otp_code?: string
+          phone_number?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -218,6 +248,10 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          last_otp_sent: string | null
+          phone_number: string | null
+          phone_verification_attempts: number | null
+          phone_verified: boolean | null
           updated_at: string
           user_id: string
         }
@@ -227,6 +261,10 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          last_otp_sent?: string | null
+          phone_number?: string | null
+          phone_verification_attempts?: number | null
+          phone_verified?: boolean | null
           updated_at?: string
           user_id: string
         }
@@ -236,6 +274,10 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          last_otp_sent?: string | null
+          phone_number?: string | null
+          phone_verification_attempts?: number | null
+          phone_verified?: boolean | null
           updated_at?: string
           user_id?: string
         }
@@ -294,7 +336,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_expired_otps: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

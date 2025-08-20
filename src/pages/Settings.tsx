@@ -21,7 +21,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 const Settings = () => {
   const [language, setLanguage] = useState<Language>("en");
-  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [tnPartyOnly, setTnPartyOnly] = useState(false);
@@ -33,11 +33,18 @@ const Settings = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Load user email and settings
+    // Load user phone number and settings
     const loadUserData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        setEmail(user.email || "");
+        // Get phone number from profiles table
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('phone_number')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        setPhoneNumber(profile?.phone_number || "");
       }
 
       // Load user settings
@@ -145,7 +152,7 @@ const Settings = () => {
   const renderContent = () => {
     switch (activeSection) {
       case "my-account":
-        return <AuthenticationSection email={email} />;
+        return <AuthenticationSection phoneNumber={phoneNumber} />;
 
       case "user-profile":
         return (

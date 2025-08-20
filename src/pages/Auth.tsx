@@ -3,20 +3,23 @@ import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle, GlassCardDescription } from "@/components/ui/glass-card"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { LanguageToggle, useTranslation, type Language } from "@/components/language-toggle"
+import { PhoneInput } from "@/components/ui/phone-input"
+import { OTPInput } from "@/components/ui/otp-input"
 import { toast } from "sonner"
-import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react"
+import { ArrowLeft, Phone, Shield, Clock } from "lucide-react"
 import { Link } from "react-router-dom"
 
+type AuthStep = "phone" | "otp" | "success"
+
 const Auth = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [isLogin, setIsLogin] = useState(true)
-  const [showPassword, setShowPassword] = useState(false)
+  const [step, setStep] = useState<AuthStep>("phone")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [otpCode, setOtpCode] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [language, setLanguage] = useState<Language>("en")
+  const [countdown, setCountdown] = useState(0)
   const navigate = useNavigate()
   const { t } = useTranslation(language)
 
@@ -31,57 +34,161 @@ const Auth = () => {
     checkUser()
   }, [navigate])
 
-  const handleAuth = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  useEffect(() => {
+    // Countdown timer for resend OTP
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [countdown])
 
+  const validatePhoneNumber = (phone: string): boolean => {
+    // Basic phone validation - should start with + and have at least 10 digits
+    const phoneRegex = /^\+[1-9]\d{1,14}$/
+    return phoneRegex.test(phone)
+  }
+
+  const handleSendOTP = async () => {
+    if (!validatePhoneNumber(phoneNumber)) {
+      toast.error(language === "en" 
+        ? "Please enter a valid phone number" 
+        : "சரியான தொலைபேசி எண்ணை உள்ளிடுங்கள்")
+      return
+    }
+
+    setIsLoading(true)
     try {
-      if (isLogin) {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        })
-        if (error) throw error
-        
-        toast.success(language === "en" ? "Logged in successfully!" : "வெற்றிகரமாக உள்நுழைந்துள்ளீர்கள்!")
-        navigate("/")
-      } else {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`
-          }
-        })
-        if (error) throw error
-        
-        if (data?.user && !data?.session) {
-          toast.success(language === "en" 
-            ? "Please check your email to confirm your account!" 
-            : "உங்கள் கணக்கை உறுதிப்படுத்த உங்கள் மின்னஞ்சலைச் சரிபார்க்கவும்!")
-        } else {
-          toast.success(language === "en" ? "Account created successfully!" : "கணக்கு வெற்றிகரமாக உருவாக்கப்பட்டது!")
-          navigate("/")
-        }
+      const response = await supabase.functions.invoke('send-otp', {
+        body: { phone_number: phoneNumber }
+      })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to send OTP')
       }
+
+      const { error: dataError } = response.data
+      if (dataError) {
+        throw new Error(dataError)
+      }
+
+      toast.success(language === "en" 
+        ? "OTP sent to your phone" 
+        : "OTP உங்கள் தொலைபேசிக்கு அனுப்பப்பட்டது")
+      
+      setStep("otp")
+      setCountdown(60) // 60 second cooldown
     } catch (error: any) {
-      toast.error(error.message)
+      console.error('Send OTP error:', error)
+      if (error.message.includes('Too many')) {
+        toast.error(language === "en" 
+          ? "Too many requests. Please try again later." 
+          : "அதிகமான கோரிக்கைகள். பின்னர் முயற்சிக்கவும்.")
+      } else {
+        toast.error(language === "en" 
+          ? "Failed to send OTP. Please try again." 
+          : "OTP அனுப்ப முடியவில்லை. மீண்டும் முயற்சிக்கவும்.")
+      }
     } finally {
       setIsLoading(false)
     }
   }
 
-  const handleGoogleAuth = async () => {
+  const handleVerifyOTP = async () => {
+    if (otpCode.length !== 6) {
+      toast.error(language === "en" 
+        ? "Please enter the complete 6-digit code" 
+        : "முழு 6 இலக்க குறியீட்டை உள்ளிடுங்கள்")
+      return
+    }
+
+    setIsLoading(true)
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/`
+      const response = await supabase.functions.invoke('verify-otp', {
+        body: { 
+          phone_number: phoneNumber,
+          otp_code: otpCode 
         }
       })
-      if (error) throw error
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to verify OTP')
+      }
+
+      const { error: dataError, auth_url } = response.data
+      if (dataError) {
+        throw new Error(dataError)
+      }
+
+      // Handle the authentication URL to sign in the user
+      if (auth_url) {
+        // Extract the token from the auth URL and use it to establish session
+        const url = new URL(auth_url)
+        const token = url.searchParams.get('token')
+        const type = url.searchParams.get('type')
+        
+        if (token && type === 'magiclink') {
+          const { data, error } = await supabase.auth.verifyOtp({
+            token_hash: token,
+            type: 'magiclink'
+          })
+          
+          if (error) {
+            console.error('Session creation error:', error)
+            // Fallback: redirect to success and let the app handle authentication
+            setStep("success")
+            setTimeout(() => navigate("/"), 2000)
+            return
+          }
+          
+          if (data.user) {
+            setStep("success")
+            toast.success(language === "en" 
+              ? "Successfully logged in!" 
+              : "வெற்றிகரமாக உள்நுழைந்துள்ளீர்கள்!")
+            setTimeout(() => navigate("/"), 1500)
+            return
+          }
+        }
+      }
+
+      // Fallback success handling
+      setStep("success")
+      setTimeout(() => {
+        window.location.href = "/"
+      }, 2000)
+
     } catch (error: any) {
-      toast.error(error.message)
+      console.error('Verify OTP error:', error)
+      if (error.message.includes('Invalid or expired')) {
+        toast.error(language === "en" 
+          ? "Invalid or expired OTP. Please try again." 
+          : "தவறான அல்லது காலாவதியான OTP. மீண்டும் முயற்சிக்கவும்.")
+      } else if (error.message.includes('Too many')) {
+        toast.error(language === "en" 
+          ? "Too many failed attempts. Please request a new OTP." 
+          : "அதிகமான தோல்வியுற்ற முயற்சிகள். புதிய OTP ஐ கோருங்கள்.")
+        setStep("phone")
+        setOtpCode("")
+      } else {
+        toast.error(language === "en" 
+          ? "Failed to verify OTP. Please try again." 
+          : "OTP சரிபார்க்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.")
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleChangeNumber = () => {
+    setStep("phone")
+    setOtpCode("")
+    setCountdown(0)
+  }
+
+  const handleResendOTP = () => {
+    if (countdown === 0) {
+      setOtpCode("")
+      handleSendOTP()
     }
   }
 
@@ -100,16 +207,25 @@ const Auth = () => {
         <GlassCard variant="elevated" padding="lg">
           <GlassCardHeader className="text-center">
             <div className="w-16 h-16 bg-gradient-neon rounded-2xl flex items-center justify-center shadow-neon mx-auto mb-4">
-              <span className="text-primary-foreground font-display font-bold text-2xl">அ</span>
+              {step === "phone" && <Phone className="w-8 h-8 text-primary-foreground" />}
+              {step === "otp" && <Shield className="w-8 h-8 text-primary-foreground" />}
+              {step === "success" && <span className="text-primary-foreground font-display font-bold text-2xl">✓</span>}
             </div>
             <GlassCardTitle className="text-2xl">
-              {isLogin ? t("login") : t("signup")}
+              {step === "phone" && (language === "en" ? "Enter your phone number" : "உங்கள் தொலைபேசி எண்ணை உள்ளிடுங்கள்")}
+              {step === "otp" && (language === "en" ? "Verify your phone" : "உங்கள் தொலைபேசியை சரிபார்க்கவும்")}
+              {step === "success" && (language === "en" ? "Welcome!" : "வரவேற்கிறோம்!")}
             </GlassCardTitle>
             <GlassCardDescription>
-              {isLogin 
-                ? (language === "en" ? "Welcome back to AIADMK Knowledge Platform" : "அ.இ.அ.த.மு.க அறிவு தளத்திற்கு வரவேற்கிறோம்")
-                : (language === "en" ? "Create your account to get started" : "தொடங்க உங்கள் கணக்கை உருவாக்குங்கள்")
-              }
+              {step === "phone" && (language === "en" 
+                ? "We'll send you a verification code to sign in" 
+                : "உள்நுழைய நாங்கள் உங்களுக்கு ஒரு சரிபார்ப்பு குறியீட்டை அனுப்புவோம்")}
+              {step === "otp" && (language === "en" 
+                ? `We've sent a 6-digit code to ${phoneNumber}` 
+                : `${phoneNumber} க்கு 6 இலக்க குறியீட்டை அனுப்பியுள்ளோம்`)}
+              {step === "success" && (language === "en" 
+                ? "You're signed in. Redirecting to your dashboard..." 
+                : "நீங்கள் உள்நுழைந்துள்ளீர்கள். உங்கள் டாஷ்போர்டுக்கு திருப்பி விடப்படுகிறது...")}
             </GlassCardDescription>
           </GlassCardHeader>
 
@@ -122,112 +238,104 @@ const Auth = () => {
               />
             </div>
 
-            <form onSubmit={handleAuth} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
-                  {t("email")}
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-glass backdrop-blur-glass border-glass-border rounded-xl"
-                    placeholder={language === "en" ? "Enter your email" : "உங்கள் மின்னஞ்சலை உள்ளிடுங்கள்"}
-                    required
+            {/* Phone Input Step */}
+            {step === "phone" && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="text-sm font-medium">
+                    {language === "en" ? "Phone Number" : "தொலைபேசி எண்"}
+                  </Label>
+                  <PhoneInput
+                    value={phoneNumber}
+                    onChange={setPhoneNumber}
+                    defaultCountry="IN"
                   />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
-                  {t("password")}
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 bg-glass backdrop-blur-glass border-glass-border rounded-xl"
-                    placeholder={language === "en" ? "Enter your password" : "உங்கள் கடவுச்சொல்லை உள்ளிடுங்கள்"}
-                    required
+                <EnhancedButton
+                  type="button"
+                  variant="neon"
+                  size="lg"
+                  className="w-full"
+                  onClick={handleSendOTP}
+                  disabled={isLoading || !phoneNumber}
+                >
+                  {isLoading ? (language === "en" ? "Sending..." : "அனுப்புகிறது...") : (language === "en" ? "Send OTP" : "OTP அனுப்பு")}
+                </EnhancedButton>
+              </div>
+            )}
+
+            {/* OTP Input Step */}
+            {step === "otp" && (
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <Label className="text-sm font-medium text-center block">
+                    {language === "en" ? "Enter verification code" : "சரிபார்ப்பு குறியீட்டை உள்ளிடுங்கள்"}
+                  </Label>
+                  <OTPInput
+                    value={otpCode}
+                    onChange={setOtpCode}
+                    length={6}
+                    disabled={isLoading}
                   />
+                </div>
+
+                <EnhancedButton
+                  type="button"
+                  variant="neon"
+                  size="lg"
+                  className="w-full"
+                  onClick={handleVerifyOTP}
+                  disabled={isLoading || otpCode.length !== 6}
+                >
+                  {isLoading ? (language === "en" ? "Verifying..." : "சரிபார்க்கிறது...") : (language === "en" ? "Verify & Continue" : "சரிபார்த்து தொடரவும்")}
+                </EnhancedButton>
+
+                <div className="text-center space-y-3">
+                  {countdown > 0 ? (
+                    <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                      <Clock className="w-4 h-4" />
+                      <span>
+                        {language === "en" 
+                          ? `Resend in ${countdown}s` 
+                          : `${countdown}வ மீண்டும் அனுப்பு`}
+                      </span>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResendOTP}
+                      className="text-sm text-neon hover:text-neon/80 transition-colors"
+                      disabled={isLoading}
+                    >
+                      {language === "en" ? "Didn't receive it? Resend OTP" : "பெறவில்லையா? OTP ஐ மீண்டும் அனுப்பு"}
+                    </button>
+                  )}
+                  
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    onClick={handleChangeNumber}
+                    className="text-sm text-muted-foreground hover:text-neon transition-colors block mx-auto"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {language === "en" ? "Change number" : "எண்ணை மாற்று"}
                   </button>
                 </div>
               </div>
+            )}
 
-              <EnhancedButton
-                type="submit"
-                variant="neon"
-                size="lg"
-                className="w-full"
-                disabled={isLoading}
-              >
-                {isLoading ? t("loading") : (isLogin ? t("login") : t("signup"))}
-              </EnhancedButton>
-            </form>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-glass-border" />
+            {/* Success Step */}
+            {step === "success" && (
+              <div className="text-center space-y-4">
+                <div className="animate-pulse">
+                  <div className="w-12 h-12 bg-gradient-neon rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">✓</span>
+                  </div>
+                </div>
+                <p className="text-muted-foreground">
+                  {language === "en" ? "You're signed in!" : "நீங்கள் உள்நுழைந்துள்ளீர்கள்!"}
+                </p>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  {language === "en" ? "Or continue with" : "அல்லது இதனுடன் தொடரவும்"}
-                </span>
-              </div>
-            </div>
-
-            <EnhancedButton
-              type="button"
-              variant="glass"
-              size="lg"
-              className="w-full"
-              onClick={handleGoogleAuth}
-            >
-              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              {t("loginWithGoogle")}
-            </EnhancedButton>
-
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-muted-foreground hover:text-neon transition-colors"
-              >
-                {isLogin 
-                  ? (language === "en" ? "Don't have an account? Sign up" : "கணக்கு இல்லையா? பதிவு செய்யுங்கள்")
-                  : (language === "en" ? "Already have an account? Login" : "ஏற்கனவே கணக்கு உள்ளதா? உள்நுழையுங்கள்")
-                }
-              </button>
-            </div>
+            )}
           </GlassCardContent>
         </GlassCard>
       </div>

@@ -9,63 +9,24 @@ import { useToast } from "@/hooks/use-toast";
 import { KeyRound, Trash2, Download, LogOut } from "lucide-react";
 
 interface AuthenticationSectionProps {
-  email: string;
+  phoneNumber: string;
 }
 
-export function AuthenticationSection({ email }: AuthenticationSectionProps) {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProps) {
+  const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const { toast } = useToast();
 
-  const handlePasswordUpdate = async () => {
-    if (newPassword !== confirmPassword) {
-      toast({
-        title: "Password mismatch",
-        description: "New password and confirmation do not match",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (newPassword.length < 8) {
-      toast({
-        title: "Password too short",
-        description: "Password must be at least 8 characters long",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsUpdatingPassword(true);
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Password updated",
-        description: "Your password has been successfully updated"
-      });
-
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-    } catch (error: any) {
-      toast({
-        title: "Update failed",
-        description: error.message || "Failed to update password",
-        variant: "destructive"
-      });
-    } finally {
-      setIsUpdatingPassword(false);
-    }
+  const handlePhoneUpdate = async () => {
+    // For phone updates, we would need to implement a new OTP verification flow
+    // This is a placeholder for future implementation
+    toast({
+      title: "Feature coming soon",
+      description: "Phone number updates will be available in a future update",
+      variant: "default"
+    });
   };
 
   const handleExportData = async () => {
@@ -81,10 +42,10 @@ export function AuthenticationSection({ email }: AuthenticationSectionProps) {
         supabase.from('conversations').select('*').eq('user_id', user.id)
       ]);
 
-      const exportData = {
+        const exportData = {
         user: {
           id: user.id,
-          email: user.email,
+          phone_number: phoneNumber,
           created_at: user.created_at
         },
         profile: profileData.data,
@@ -193,57 +154,41 @@ export function AuthenticationSection({ email }: AuthenticationSectionProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email Address</Label>
+            <Label htmlFor="phone">Phone Number</Label>
             <Input
-              id="email"
-              type="email"
-              value={email}
+              id="phone"
+              type="tel"
+              value={phoneNumber}
               disabled
               className="bg-muted"
             />
             <p className="text-xs text-muted-foreground">
-              Email changes are not currently supported
+              Phone number changes will be available in a future update
             </p>
           </div>
         </CardContent>
       </Card>
 
-      {/* Password Update */}
+      {/* Phone Update */}
       <Card>
         <CardHeader>
-          <CardTitle>Change Password</CardTitle>
+          <CardTitle>Update Phone Number</CardTitle>
           <CardDescription>
-            Update your password to keep your account secure
+            Change your phone number (coming soon)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="new-password">New Password</Label>
-            <Input
-              id="new-password"
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Enter new password"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
-            <Input
-              id="confirm-password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm new password"
-            />
-          </div>
           <Button
-            onClick={handlePasswordUpdate}
-            disabled={isUpdatingPassword || !newPassword || !confirmPassword}
+            onClick={handlePhoneUpdate}
+            disabled={isUpdatingPhone}
             className="w-full"
+            variant="outline"
           >
-            {isUpdatingPassword ? "Updating..." : "Update Password"}
+            {isUpdatingPhone ? "Updating..." : "Update Phone Number"}
           </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            This feature will be available in a future update
+          </p>
         </CardContent>
       </Card>
 
