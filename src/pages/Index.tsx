@@ -144,10 +144,10 @@ const Index = () => {
               <span className="text-neon flex items-center justify-center gap-4">
                 <img 
                   src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
-                  alt="chatADMK Logo" 
+                  alt="CHAT_AI_ADMK Logo" 
                   className="w-16 lg:w-20 h-16 lg:h-20 rounded-xl shadow-[0_0_20px_rgba(0,255,255,0.4),0_0_40px_rgba(0,255,255,0.2)]"
                 />
-                Chatadmk
+                CHAT_AI_ADMK
               </span>
             </h1>
             

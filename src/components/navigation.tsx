@@ -55,10 +55,10 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
             <Link to="/" className="flex items-center space-x-2 lg:space-x-3 group flex-shrink-0">
               <img 
                 src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
-                alt="chatADMK Logo" 
+                alt="CHAT_AI_ADMK Logo"
                 className="w-8 lg:w-10 h-8 lg:h-10 rounded-xl bg-white/90 p-1 shadow-[0_0_10px_rgba(255,255,255,0.4),0_0_20px_rgba(0,255,255,0.2)] backdrop-blur-sm border border-white/20 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.6),0_0_30px_rgba(0,255,255,0.3)] group-hover:scale-110 transition-all duration-300"
               />
-              <span className="font-display font-bold text-lg lg:text-xl text-neon">chatADMK</span>
+              <span className="font-display font-bold text-lg lg:text-xl text-neon">CHAT_AI_ADMK</span>
             </Link>
 
             {/* Navigation Links */}
@@ -116,10 +116,10 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
             <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
               <img 
                 src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
-                alt="chatADMK Logo" 
+                alt="CHAT_AI_ADMK Logo" 
                 className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-white/90 p-1 shadow-[0_0_8px_rgba(255,255,255,0.4),0_0_16px_rgba(0,255,255,0.2)] backdrop-blur-sm border border-white/20"
               />
-              <span className="font-display font-bold text-base sm:text-lg text-neon">chatADMK</span>
+              <span className="font-display font-bold text-base sm:text-lg text-neon">CHAT_AI_ADMK</span>
             </Link>
 
             {/* Right Side - Mobile */}
