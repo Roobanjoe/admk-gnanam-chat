@@ -17,7 +17,6 @@ import { NotificationSettings } from "@/components/settings/NotificationSettings
 import { useProfile } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { onAuthStateChange, getCurrentUser } from "@/lib/auth";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const Settings = () => {
@@ -36,22 +35,28 @@ const Settings = () => {
   useEffect(() => {
     // Load user phone number and settings
     const loadUserData = async () => {
-      const user = getCurrentUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // Set phone number from Firebase user
-        setPhoneNumber(user.phoneNumber || "");
-
-        // Load user settings from Supabase (keeping this for now)
-        const { data: settings } = await supabase
-          .from('user_settings')
-          .select('*')
-          .eq('user_id', user.uid)
+        // Get phone number from profiles table
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('phone_number')
+          .eq('user_id', user.id)
           .maybeSingle();
+        
+        setPhoneNumber(profile?.phone_number || "");
+      }
 
-        if (settings) {
-          setLanguage(settings.default_language as Language);
-          setTnPartyOnly(settings.tn_party_only || false);
-        }
+      // Load user settings
+      const { data: settings } = await supabase
+        .from('user_settings')
+        .select('*')
+        .eq('user_id', user?.id)
+        .maybeSingle();
+
+      if (settings) {
+        setLanguage(settings.default_language as Language);
+        setTnPartyOnly(settings.tn_party_only || false);
       }
     };
 
@@ -97,13 +102,13 @@ const Settings = () => {
 
   const handleSettingsUpdate = async () => {
     try {
-      const user = getCurrentUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       await supabase
         .from('user_settings')
         .upsert({
-          user_id: user.uid,
+          user_id: user.id,
           default_language: language,
           tn_party_only: tnPartyOnly
         }, { onConflict: 'user_id' });
@@ -123,13 +128,13 @@ const Settings = () => {
 
   const clearChatHistory = async () => {
     try {
-      const user = getCurrentUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       await supabase
         .from('conversations')
         .delete()
-        .eq('user_id', user.uid);
+        .eq('user_id', user.id);
 
       toast({
         title: "History cleared",

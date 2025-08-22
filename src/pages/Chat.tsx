@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Navigation } from "@/components/navigation";
 import { BackButton } from "@/components/ui/back-button";
 import { useTranslation, type Language } from "@/components/language-toggle";
-import { onAuthStateChange, signOut, getCurrentUser } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { GlassCard, GlassCardHeader, GlassCardTitle, GlassCardContent, GlassCardFooter } from "@/components/ui/glass-card";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
@@ -23,33 +23,28 @@ const Chat = () => {
   const { t } = useTranslation(language);
 
   useEffect(() => {
-    // Check current user
-    const currentUser = getCurrentUser();
-    setUser(currentUser);
-    if (!currentUser) {
-      window.location.href = "/auth";
-    }
-
-    // Set up auth state listener
-    const unsubscribe = onAuthStateChange((user) => {
-      setUser(user);
-      if (!user) {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (!session?.user) {
         window.location.href = "/auth";
       }
     });
 
-    return () => unsubscribe();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+      if (!session?.user) {
+        window.location.href = "/auth";
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const handleSignOut = async () => {
     try {
-      const result = await signOut();
-      if (result.success) {
-        toast.success("Signed out successfully");
-        window.location.href = "/auth";
-      } else {
-        throw new Error(result.error || "Failed to sign out");
-      }
+      await supabase.auth.signOut();
+      toast.success("Signed out successfully");
     } catch (error: any) {
       toast.error("Error signing out: " + error.message);
     }

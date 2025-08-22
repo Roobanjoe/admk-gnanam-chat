@@ -4,7 +4,7 @@ import { Navigation } from "@/components/navigation"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle, GlassCardDescription } from "@/components/ui/glass-card"
 import { useTranslation, type Language } from "@/components/language-toggle"
-import { onAuthStateChange, getCurrentUser, signOut } from "@/lib/auth"
+import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 import ParticleBackground from "@/components/ParticleBackground"
 import { 
@@ -27,28 +27,26 @@ const Index = () => {
   const { t } = useTranslation(language)
 
   useEffect(() => {
-    // Get current user and set up auth listener
-    const currentUser = getCurrentUser();
-    setUser(currentUser);
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null)
+    })
 
-    const unsubscribe = onAuthStateChange((user) => {
-      setUser(user);
-    });
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null)
+    })
 
-    return () => unsubscribe();
+    return () => subscription.unsubscribe()
   }, [])
 
 
   const handleSignOut = async () => {
     try {
-      const result = await signOut();
-      if (result.success) {
-        toast.success("Signed out successfully");
-      } else {
-        throw new Error(result.error || "Failed to sign out");
-      }
+      await supabase.auth.signOut()
+      toast.success("Signed out successfully")
     } catch (error: any) {
-      toast.error("Error signing out: " + error.message);
+      toast.error("Error signing out: " + error.message)
     }
   }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { supabase } from "@/integrations/supabase/client"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle, GlassCardDescription } from "@/components/ui/glass-card"
 import { Label } from "@/components/ui/label"
@@ -9,7 +10,6 @@ import { OTPInput } from "@/components/ui/otp-input"
 import { toast } from "sonner"
 import { ArrowLeft, Phone, Shield, Clock } from "lucide-react"
 import { Link } from "react-router-dom"
-import { sendOTP, verifyOTP, onAuthStateChange, initializeRecaptcha, cleanup } from "@/lib/auth"
 
 type AuthStep = "phone" | "otp" | "success"
 
@@ -24,20 +24,14 @@ const Auth = () => {
   const { t } = useTranslation(language)
 
   useEffect(() => {
-    // Check if user is already logged in and set up auth listener
-    const unsubscribe = onAuthStateChange((user) => {
-      if (user) {
+    // Check if user is already logged in
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
         navigate("/")
       }
-    })
-
-    // Initialize reCAPTCHA
-    initializeRecaptcha()
-
-    return () => {
-      unsubscribe()
-      cleanup()
     }
+    checkUser()
   }, [navigate])
 
   useEffect(() => {
@@ -64,27 +58,34 @@ const Auth = () => {
 
     setIsLoading(true)
     try {
-      const result = await sendOTP(phoneNumber)
-      
-      if (result.success) {
-        toast.success(language === "en" 
-          ? "OTP sent to your phone" 
-          : "OTP உங்கள் தொலைபேசிக்கு அனுப்பப்பட்டது")
-        
-        setStep("otp")
-        setCountdown(60) // 60 second cooldown
-      } else {
-        throw new Error(result.error || 'Failed to send OTP')
+      const response = await supabase.functions.invoke('send-otp', {
+        body: { phone_number: phoneNumber }
+      })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to send OTP')
       }
+
+      const { error: dataError } = response.data
+      if (dataError) {
+        throw new Error(dataError)
+      }
+
+      toast.success(language === "en" 
+        ? "OTP sent to your phone" 
+        : "OTP உங்கள் தொலைபேசிக்கு அனுப்பப்பட்டது")
+      
+      setStep("otp")
+      setCountdown(60) // 60 second cooldown
     } catch (error: any) {
       console.error('Send OTP error:', error)
-      if (error.message.includes('Too many') || error.message.includes('quota')) {
+      if (error.message.includes('Too many')) {
         toast.error(language === "en" 
           ? "Too many requests. Please try again later." 
           : "அதிகமான கோரிக்கைகள். பின்னர் முயற்சிக்கவும்.")
       } else {
         toast.error(language === "en" 
-          ? error.message || "Failed to send OTP. Please try again." 
+          ? "Failed to send OTP. Please try again." 
           : "OTP அனுப்ப முடியவில்லை. மீண்டும் முயற்சிக்கவும்.")
       }
     } finally {
@@ -102,32 +103,75 @@ const Auth = () => {
 
     setIsLoading(true)
     try {
-      const result = await verifyOTP(otpCode)
-      
-      if (result.success && result.user) {
-        setStep("success")
-        toast.success(language === "en" 
-          ? "Successfully logged in!" 
-          : "வெற்றிகரமாக உள்நுழைந்துள்ளீர்கள்!")
-        setTimeout(() => navigate("/"), 1500)
-      } else {
-        throw new Error(result.error || 'Failed to verify OTP')
+      const response = await supabase.functions.invoke('verify-otp', {
+        body: { 
+          phone_number: phoneNumber,
+          otp_code: otpCode 
+        }
+      })
+
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to verify OTP')
       }
+
+      const { error: dataError, auth_url } = response.data
+      if (dataError) {
+        throw new Error(dataError)
+      }
+
+      // Handle the authentication URL to sign in the user
+      if (auth_url) {
+        // Extract the token from the auth URL and use it to establish session
+        const url = new URL(auth_url)
+        const token = url.searchParams.get('token')
+        const type = url.searchParams.get('type')
+        
+        if (token && type === 'magiclink') {
+          const { data, error } = await supabase.auth.verifyOtp({
+            token_hash: token,
+            type: 'magiclink'
+          })
+          
+          if (error) {
+            console.error('Session creation error:', error)
+            // Fallback: redirect to success and let the app handle authentication
+            setStep("success")
+            setTimeout(() => navigate("/"), 2000)
+            return
+          }
+          
+          if (data.user) {
+            setStep("success")
+            toast.success(language === "en" 
+              ? "Successfully logged in!" 
+              : "வெற்றிகரமாக உள்நுழைந்துள்ளீர்கள்!")
+            setTimeout(() => navigate("/"), 1500)
+            return
+          }
+        }
+      }
+
+      // Fallback success handling
+      setStep("success")
+      setTimeout(() => {
+        window.location.href = "/"
+      }, 2000)
+
     } catch (error: any) {
       console.error('Verify OTP error:', error)
-      if (error.message.includes('Invalid') || error.message.includes('code')) {
+      if (error.message.includes('Invalid or expired')) {
         toast.error(language === "en" 
-          ? "Invalid OTP. Please check and try again." 
-          : "தவறான OTP. சரிபார்த்து மீண்டும் முயற்சிக்கவும்.")
-      } else if (error.message.includes('expired')) {
+          ? "Invalid or expired OTP. Please try again." 
+          : "தவறான அல்லது காலாவதியான OTP. மீண்டும் முயற்சிக்கவும்.")
+      } else if (error.message.includes('Too many')) {
         toast.error(language === "en" 
-          ? "OTP has expired. Please request a new one." 
-          : "OTP காலாவதியாகிவிட்டது. புதிதாக கோருங்கள்.")
+          ? "Too many failed attempts. Please request a new OTP." 
+          : "அதிகமான தோல்வியுற்ற முயற்சிகள். புதிய OTP ஐ கோருங்கள்.")
         setStep("phone")
         setOtpCode("")
       } else {
         toast.error(language === "en" 
-          ? error.message || "Failed to verify OTP. Please try again." 
+          ? "Failed to verify OTP. Please try again." 
           : "OTP சரிபார்க்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.")
       }
     } finally {
@@ -186,9 +230,6 @@ const Auth = () => {
           </GlassCardHeader>
 
           <GlassCardContent className="space-y-6">
-            {/* reCAPTCHA container (invisible) */}
-            <div id="recaptcha-container"></div>
-            
             {/* Language Toggle */}
             <div className="flex justify-center">
               <LanguageToggle 
