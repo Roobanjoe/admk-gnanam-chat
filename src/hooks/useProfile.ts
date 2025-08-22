@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { getCurrentUser } from "@/lib/auth";
 
 interface Profile {
   id: string;
@@ -24,13 +25,13 @@ export function useProfile() {
 
   const loadProfile = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = getCurrentUser();
       if (!user) return;
 
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', user.uid)
         .maybeSingle();
 
       if (error) throw error;
@@ -38,10 +39,10 @@ export function useProfile() {
       if (data) {
         setProfile(data);
       } else {
-        // Create profile if it doesn't exist
+        // Create profile if it doesn't exist using Firebase user ID
         const { data: newProfile, error: createError } = await supabase
           .from('profiles')
-          .insert([{ user_id: user.id }])
+          .insert([{ user_id: user.uid }])
           .select()
           .single();
 

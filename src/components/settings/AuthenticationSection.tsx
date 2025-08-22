@@ -7,6 +7,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { KeyRound, Trash2, Download, LogOut } from "lucide-react";
+import { signOut, getCurrentUser } from "@/lib/auth";
 
 interface AuthenticationSectionProps {
   phoneNumber: string;
@@ -32,21 +33,22 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
   const handleExportData = async () => {
     setIsExporting(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = getCurrentUser();
       if (!user) throw new Error('User not authenticated');
 
-      // Fetch user data
+      // Fetch user data from various tables using Firebase user ID
       const [profileData, settingsData, conversationsData] = await Promise.all([
-        supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle(),
-        supabase.from('user_settings').select('*').eq('user_id', user.id).maybeSingle(),
-        supabase.from('conversations').select('*').eq('user_id', user.id)
+        supabase.from('profiles').select('*').eq('user_id', user.uid).maybeSingle(),
+        supabase.from('user_settings').select('*').eq('user_id', user.uid).maybeSingle(),
+        supabase.from('conversations').select('*').eq('user_id', user.uid)
       ]);
 
-        const exportData = {
+      const exportData = {
         user: {
-          id: user.id,
-          phone_number: phoneNumber,
-          created_at: user.created_at
+          uid: user.uid,
+          phoneNumber: user.phoneNumber,
+          displayName: user.displayName,
+          created_at: user.metadata.creationTime
         },
         profile: profileData.data,
         settings: settingsData.data,
@@ -83,28 +85,31 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
   const handleAccountDeletion = async () => {
     setIsDeleting(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = getCurrentUser();
       if (!user) throw new Error('User not authenticated');
 
-      // Delete all user data
+      // Delete all user data using Firebase user ID
       await Promise.all([
-        supabase.from('profiles').delete().eq('user_id', user.id),
-        supabase.from('user_settings').delete().eq('user_id', user.id),
-        supabase.from('conversations').delete().eq('user_id', user.id)
+        supabase.from('profiles').delete().eq('user_id', user.uid),
+        supabase.from('user_settings').delete().eq('user_id', user.uid),
+        supabase.from('conversations').delete().eq('user_id', user.uid)
       ]);
 
-      // Note: Actual user deletion would need to be handled by Supabase Admin API
-      // For now, we'll sign them out and show a message
-      await supabase.auth.signOut();
+      // Sign out using Firebase
+      const result = await signOut();
       
-      toast({
-        title: "Account deletion initiated",
-        description: "Your data has been removed. Contact support to complete account deletion.",
-        variant: "destructive"
-      });
+      if (result.success) {
+        toast({
+          title: "Account deletion initiated",
+          description: "Your data has been removed. Contact support to complete account deletion.",
+          variant: "destructive"
+        });
 
-      // Redirect to home
-      window.location.href = '/';
+        // Redirect to home
+        window.location.href = '/';
+      } else {
+        throw new Error(result.error || "Failed to sign out");
+      }
     } catch (error: any) {
       toast({
         title: "Deletion failed",
@@ -119,15 +124,18 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
   const handleSignOut = async () => {
     setIsSigningOut(true);
     try {
-      // Clean up auth state
-      Object.keys(localStorage).forEach((key) => {
-        if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
-          localStorage.removeItem(key);
-        }
-      });
+      const result = await signOut();
+      
+      if (result.success) {
+        toast({
+          title: "Signed out",
+          description: "You have been successfully signed out"
+        });
 
-      await supabase.auth.signOut({ scope: 'global' });
-      window.location.href = '/auth';
+        window.location.href = '/auth';
+      } else {
+        throw new Error(result.error || "Failed to sign out");
+      }
     } catch (error: any) {
       toast({
         title: "Sign out failed",
