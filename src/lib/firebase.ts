@@ -2,12 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBTiQfhW9xOBzgUKGLlNXjxlLQvZqsb0gE",
-  authDomain: "aiadmk-platform.firebaseapp.com",
-  projectId: "aiadmk-platform",
-  storageBucket: "aiadmk-platform.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcd1234567890"
+  apiKey: "AIzaSyCRDuevGrIHuTqSDl29vJW63stfaNudFSU",
+  authDomain: "authphonechataiadmk.firebaseapp.com",
+  projectId: "authphonechataiadmk",
+  storageBucket: "authphonechataiadmk.firebasestorage.app",
+  messagingSenderId: "1043683458978",
+  appId: "1:1043683458978:web:5c5acc2af6be0f542d3cfb",
+  measurementId: "G-1VJBNN4GC8"
 };
 
 // Initialize Firebase

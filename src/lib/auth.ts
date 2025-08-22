@@ -12,38 +12,61 @@ let recaptchaVerifier: RecaptchaVerifier | null = null;
 let confirmationResult: ConfirmationResult | null = null;
 
 export const initializeRecaptcha = (elementId: string = 'recaptcha-container'): RecaptchaVerifier => {
-  if (recaptchaVerifier) {
-    recaptchaVerifier.clear();
-  }
-  
-  recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
-    size: 'invisible',
-    callback: () => {
-      // reCAPTCHA solved
-    },
-    'expired-callback': () => {
-      // Response expired. Ask user to solve reCAPTCHA again.
-      console.log('reCAPTCHA expired');
+  try {
+    console.log('Initializing reCAPTCHA with element ID:', elementId);
+    
+    if (recaptchaVerifier) {
+      console.log('Clearing existing reCAPTCHA verifier');
+      recaptchaVerifier.clear();
     }
-  });
-  
-  return recaptchaVerifier;
+    
+    // Check if the container element exists
+    const container = document.getElementById(elementId);
+    if (!container) {
+      console.error('reCAPTCHA container element not found:', elementId);
+      throw new Error(`reCAPTCHA container element '${elementId}' not found`);
+    }
+    
+    recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
+      size: 'invisible',
+      callback: (response: any) => {
+        console.log('reCAPTCHA solved successfully:', response);
+      },
+      'expired-callback': () => {
+        console.log('reCAPTCHA expired, user needs to solve again');
+      }
+    });
+    
+    console.log('reCAPTCHA verifier created successfully');
+    return recaptchaVerifier;
+  } catch (error) {
+    console.error('Error initializing reCAPTCHA:', error);
+    throw error;
+  }
 };
 
 export const sendOTP = async (phoneNumber: string): Promise<{ success: boolean; error?: string }> => {
   try {
+    console.log('Starting OTP send process for phone:', phoneNumber);
+    
     if (!recaptchaVerifier) {
+      console.log('Initializing reCAPTCHA...');
       initializeRecaptcha();
     }
     
     if (!recaptchaVerifier) {
+      console.error('Failed to initialize reCAPTCHA');
       throw new Error('Failed to initialize reCAPTCHA');
     }
 
+    console.log('Attempting to send OTP via Firebase...');
     confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+    console.log('OTP sent successfully via Firebase');
     return { success: true };
   } catch (error: any) {
     console.error('Error sending OTP:', error);
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
     
     // Clear the recaptcha verifier on error
     if (recaptchaVerifier) {
@@ -59,6 +82,14 @@ export const sendOTP = async (phoneNumber: string): Promise<{ success: boolean; 
       errorMessage = 'Too many requests. Please try again later.';
     } else if (error.code === 'auth/quota-exceeded') {
       errorMessage = 'SMS quota exceeded. Please try again later.';
+    } else if (error.code === 'auth/captcha-check-failed') {
+      errorMessage = 'reCAPTCHA verification failed. Please try again.';
+    } else if (error.code === 'auth/invalid-app-credential') {
+      errorMessage = 'Invalid Firebase configuration. Please check your setup.';
+    } else if (error.code === 'auth/app-not-authorized') {
+      errorMessage = 'App not authorized for this Firebase project.';
+    } else if (error.code === 'auth/api-key-not-valid.-please-pass-a-valid-api-key.') {
+      errorMessage = 'Firebase API key is invalid or not configured properly. Please check Firebase Console settings.';
     }
     
     return { success: false, error: errorMessage };
