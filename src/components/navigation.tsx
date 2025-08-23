@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom"
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { LanguageToggle, useTranslation, type Language } from "@/components/language-toggle"
 import { GlassCard } from "@/components/ui/glass-card"
-import { ProfileDropdown } from "@/components/ProfileDropdown"
 import { 
   Home, 
   Info, 
@@ -13,21 +12,17 @@ import {
   MessageSquare, 
   Settings, 
   BookOpen,
-  LogIn,
-  LogOut,
   Menu,
   X
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface NavigationProps {
-  user?: any
-  onSignOut?: () => void
   language: Language
   onLanguageChange: (lang: Language) => void
 }
 
-export function Navigation({ user, onSignOut, language, onLanguageChange }: NavigationProps) {
+export function Navigation({ language, onLanguageChange }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
   const { t } = useTranslation(language)
@@ -82,27 +77,10 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
 
             {/* Right Side */}
             <div className="flex items-center space-x-2 lg:space-x-3 flex-shrink-0">
-              <div className="hidden sm:block">
-                <LanguageToggle 
-                  language={language} 
-                  onLanguageChange={onLanguageChange} 
-                />
-              </div>
-              
-              {user ? (
-                <ProfileDropdown 
-                  user={user} 
-                  onSignOut={onSignOut} 
-                  language={language} 
-                />
-              ) : (
-                <Link to="/auth">
-                  <EnhancedButton variant="neon" size="sm">
-                    <LogIn className="w-4 h-4" />
-                    <span className="hidden sm:inline">{t("signIn")}</span>
-                  </EnhancedButton>
-                </Link>
-              )}
+              <LanguageToggle 
+                language={language} 
+                onLanguageChange={onLanguageChange} 
+              />
             </div>
           </div>
         </div>
@@ -167,30 +145,11 @@ export function Navigation({ user, onSignOut, language, onLanguageChange }: Navi
                 ))}
                 
                 <div className="border-t border-glass-border pt-3 mt-3">
-                  <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 px-3 sm:px-4 py-2">
-                    <div className="hidden sm:block">
-                      <LanguageToggle 
-                        language={language} 
-                        onLanguageChange={onLanguageChange} 
-                      />
-                    </div>
-                    
-                    {user ? (
-                      <div onClick={() => setIsMobileMenuOpen(false)} className="w-full sm:w-auto">
-                        <ProfileDropdown 
-                          user={user} 
-                          onSignOut={onSignOut} 
-                          language={language} 
-                        />
-                      </div>
-                    ) : (
-                      <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)} className="w-full sm:w-auto">
-                        <EnhancedButton variant="neon" size="sm" className="w-full sm:w-auto">
-                          <LogIn className="w-4 h-4" />
-                          {t("signIn")}
-                        </EnhancedButton>
-                      </Link>
-                    )}
+                  <div className="flex justify-center px-3 sm:px-4 py-2">
+                    <LanguageToggle 
+                      language={language} 
+                      onLanguageChange={onLanguageChange} 
+                    />
                   </div>
                 </div>
               </div>

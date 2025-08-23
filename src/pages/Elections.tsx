@@ -4,8 +4,6 @@ import { GlassCard, GlassCardHeader, GlassCardTitle, GlassCardContent } from "@/
 import { EnhancedButton } from "@/components/ui/enhanced-button"
 import { BackButton } from "@/components/ui/back-button"
 import { useTranslation, type Language } from "@/components/language-toggle"
-import { supabase } from "@/integrations/supabase/client"
-import { toast } from "sonner"
 import { 
   Calendar, 
   Trophy, 
@@ -21,31 +19,9 @@ import {
 } from "lucide-react"
 
 const Elections = () => {
-  const [user, setUser] = useState<any>(null)
   const [language, setLanguage] = useState<Language>("en")
   const [selectedElection, setSelectedElection] = useState<any>(null)
   const { t } = useTranslation(language)
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut()
-      toast.success("Signed out successfully")
-    } catch (error: any) {
-      toast.error("Error signing out: " + error.message)
-    }
-  }
 
   const elections = [
     {
@@ -150,8 +126,6 @@ const Elections = () => {
     return (
       <div className="min-h-screen bg-background">
         <Navigation
-          user={user}
-          onSignOut={handleSignOut}
           language={language}
           onLanguageChange={setLanguage}
         />
@@ -271,8 +245,6 @@ const Elections = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation
-        user={user}
-        onSignOut={handleSignOut}
         language={language}
         onLanguageChange={setLanguage}
       />

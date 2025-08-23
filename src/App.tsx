@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import ParticleBackground from "@/components/ParticleBackground";
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
+
 import About from "./pages/About";
 import Leaders from "./pages/Leaders";
 import Elections from "./pages/Elections";
@@ -34,7 +34,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
+            
             <Route path="/about" element={<About />} />
             <Route path="/leaders" element={<Leaders />} />
             <Route path="/elections" element={<Elections />} />

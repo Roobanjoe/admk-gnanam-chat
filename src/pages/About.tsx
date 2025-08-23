@@ -3,35 +3,11 @@ import { Navigation } from "@/components/navigation"
 import { GlassCard, GlassCardHeader, GlassCardTitle, GlassCardContent } from "@/components/ui/glass-card"
 import { BackButton } from "@/components/ui/back-button"
 import { useTranslation, type Language } from "@/components/language-toggle"
-import { supabase } from "@/integrations/supabase/client"
-import { toast } from "sonner"
 import { Calendar, Users, Heart, Award, Flag, Target } from "lucide-react"
 
 const About = () => {
-  const [user, setUser] = useState<any>(null)
   const [language, setLanguage] = useState<Language>("en")
   const { t } = useTranslation(language)
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut()
-      toast.success("Signed out successfully")
-    } catch (error: any) {
-      toast.error("Error signing out: " + error.message)
-    }
-  }
 
   const timeline = [
     {
@@ -105,8 +81,6 @@ const About = () => {
   return (
     <div className="min-h-screen">
       <Navigation 
-        user={user}
-        onSignOut={handleSignOut}
         language={language}
         onLanguageChange={setLanguage}
       />

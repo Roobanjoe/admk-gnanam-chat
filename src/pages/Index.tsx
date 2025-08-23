@@ -21,43 +21,12 @@ import {
 import heroImage from "@/assets/hero-banner.jpg"
 
 const Index = () => {
-  const [user, setUser] = useState<any>(null)
   const [language, setLanguage] = useState<Language>("en")
   const navigate = useNavigate()
   const { t } = useTranslation(language)
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-    })
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut()
-      toast.success("Signed out successfully")
-    } catch (error: any) {
-      toast.error("Error signing out: " + error.message)
-    }
-  }
-
   const handleStartChat = () => {
-    if (!user) {
-      // Redirect to auth if not logged in
-      navigate('/auth')
-      return
-    }
-    
-    // Navigate to chat page
+    // Navigate directly to chat page
     navigate('/app')
   }
 
@@ -123,8 +92,6 @@ const Index = () => {
     <div className="min-h-screen relative">
       <ParticleBackground />
       <Navigation 
-        user={user}
-        onSignOut={handleSignOut}
         language={language}
         onLanguageChange={setLanguage}
       />
@@ -231,10 +198,7 @@ const Index = () => {
                       <GlassCardContent>
                         <div className="flex items-center text-neon group-hover:text-neon/80 transition-colors">
                           <span className="text-sm font-medium">
-                            {!user 
-                              ? (language === "en" ? "Sign in to chat" : "அரட்டையிட உள்நுழையுங்கள்")
-                              : (language === "en" ? "Start Chat" : "அரட்டை தொடங்கு")
-                            }
+                            {language === "en" ? "Start Chat" : "அரட்டை தொடங்கு"}
                           </span>
                           <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </div>

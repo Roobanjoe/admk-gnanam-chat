@@ -2,17 +2,14 @@ import { useState, useEffect } from "react";
 import { Navigation } from "@/components/navigation";
 import { BackButton } from "@/components/ui/back-button";
 import { useTranslation, type Language } from "@/components/language-toggle";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 import { GlassCard, GlassCardHeader, GlassCardTitle, GlassCardContent, GlassCardFooter } from "@/components/ui/glass-card";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Maximize2, Minimize2, RefreshCw, Palette, Monitor, Smartphone, Square } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 const Chat = () => {
-  const [user, setUser] = useState<any>(null);
   const [language, setLanguage] = useState<Language>("en");
   const [isLoading, setIsLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -21,34 +18,6 @@ const Chat = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
   const { t } = useTranslation(language);
-
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (!session?.user) {
-        window.location.href = "/auth";
-      }
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-      if (!session?.user) {
-        window.location.href = "/auth";
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      toast.success("Signed out successfully");
-    } catch (error: any) {
-      toast.error("Error signing out: " + error.message);
-    }
-  };
 
   const handleIframeLoad = () => {
     setIsLoading(false);
@@ -84,22 +53,9 @@ const Chat = () => {
     return `w-[90%] max-w-6xl mx-auto ${getContainerHeight()}`;
   };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-4">
-          <Skeleton className="h-8 w-32" />
-          <Skeleton className="h-4 w-48" />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation 
-        user={user}
-        onSignOut={handleSignOut}
         language={language}
         onLanguageChange={setLanguage}
       />
