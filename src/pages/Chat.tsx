@@ -157,7 +157,7 @@ const Chat = () => {
               <div className="h-full w-full rounded-lg overflow-hidden">
                 <iframe
                   key={iframeKey}
-                  src="https://cdn.botpress.cloud/webchat/v3.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/08/16/09/20250816095926-HXID0BCT.json"
+                  src="https://cdn.botpress.cloud/webchat/v3.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/08/22/09/20250822093624-WH17FEK6.json"
                   className="w-full h-full border-0"
                   allow="microphone; camera"
                   title={language === "en" ? "AIADMK Information Assistant" : "அ.இ.அ.த.மு.க தகவல் உதவியாளர்"}
