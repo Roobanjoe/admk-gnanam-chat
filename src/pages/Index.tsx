@@ -169,7 +169,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <div key={index} className="group">
                 {feature.title.includes("AI Chat") || feature.title.includes("AI அரட்டை") ? (
