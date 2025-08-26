@@ -50,15 +50,6 @@ const Index = () => {
       color: "from-green-500/20 to-emerald-500/20"
     },
     {
-      icon: FileText,
-      title: t("partyManifestos"),
-      description: language === "en"
-        ? "Access party manifestos, policies, and ideological documents"
-        : "கட்சி அறிக்கைகள், கொள்கைகள் மற்றும் கருத்தியல் ஆவணங்களை அணுகுங்கள்",
-      href: "/manifestos",
-      color: "from-purple-500/20 to-pink-500/20"
-    },
-    {
       icon: MessageSquare,
       title: language === "en" ? "AI Chat Assistant" : "AI அரட்டை உதவியாளர்",
       description: language === "en"
