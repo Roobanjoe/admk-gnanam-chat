@@ -101,8 +101,8 @@ const Index = () => {
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-7xl mb-6 leading-tight">
               <span className="group flex items-center justify-center gap-4 cursor-pointer transition-all duration-300 hover:scale-105">
                 <img 
-                  src="/lovable-uploads/4c55a5ae-529c-4bca-b792-7c364b28e82b.png" 
-                  alt="CHAT_AI_ADMK Logo" 
+                  src="/lovable-uploads/fa5392ec-df07-49d4-ac2d-fa299e53511a.png" 
+                  alt="AIADMK Party Logo" 
                   className="w-16 lg:w-20 h-16 lg:h-20 rounded-xl shadow-[0_0_20px_rgba(0,255,255,0.4),0_0_40px_rgba(0,255,255,0.2)] group-hover:shadow-[0_0_30px_rgba(255,255,255,0.6),0_0_60px_rgba(255,255,255,0.3)] transition-all duration-300"
                 />
                 <span className="bg-gradient-to-r from-neon via-white to-neon bg-clip-text text-transparent group-hover:from-white group-hover:via-white/90 group-hover:to-white/80 transition-all duration-300 drop-shadow-[0_2px_4px_rgba(0,255,255,0.4)] group-hover:drop-shadow-[0_4px_8px_rgba(255,255,255,0.3)]">
