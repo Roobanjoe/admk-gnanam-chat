@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 
 import About from "./pages/About";
 import Leaders from "./pages/Leaders";
+import LeaderDetail from "./pages/LeaderDetail";
 import Elections from "./pages/Elections";
 import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
@@ -37,6 +38,7 @@ const App = () => (
             
             <Route path="/about" element={<About />} />
             <Route path="/leaders" element={<Leaders />} />
+            <Route path="/leaders/:slug" element={<LeaderDetail />} />
             <Route path="/elections" element={<Elections />} />
             <Route path="/app" element={<Chat />} />
             <Route path="/settings" element={<Settings />} />
