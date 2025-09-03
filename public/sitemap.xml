@@ -1,63 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
-    <loc>https://yourdomain.com/</loc>
-    <lastmod>2024-12-20</lastmod>
+    <loc>https://chataiadmk.com/</loc>
+    <lastmod>2025-09-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://yourdomain.com/about</loc>
-    <lastmod>2024-12-20</lastmod>
+    <loc>https://chataiadmk.com/about</loc>
+    <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://yourdomain.com/leaders</loc>
-    <lastmod>2024-12-20</lastmod>
+    <loc>https://chataiadmk.com/leaders</loc>
+    <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://yourdomain.com/elections</loc>
-    <lastmod>2024-12-20</lastmod>
+    <loc>https://chataiadmk.com/elections</loc>
+    <lastmod>2025-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://yourdomain.com/leaders/c-n-annadurai</loc>
-    <lastmod>2024-12-20</lastmod>
+    <loc>https://chataiadmk.com/leaders/c-n-annadurai</loc>
+    <lastmod>2025-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+
   <url>
-    <loc>https://yourdomain.com/leaders/m-g-ramachandran</loc>
-    <lastmod>2024-12-20</lastmod>
+    <loc>https://chataiadmk.com/leaders/m-g-ramachandran</loc>
+    <lastmod>2025-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+
   <url>
-    <loc>https://yourdomain.com/leaders/j-jayalalithaa</loc>
-    <lastmod>2024-12-20</lastmod>
+    <loc>https://chataiadmk.com/leaders/j-jayalalithaa</loc>
+    <lastmod>2025-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+
   <url>
-    <loc>https://yourdomain.com/leaders/edappadi-k-palaniswami</loc>
-    <lastmod>2024-12-20</lastmod>
+    <loc>https://chataiadmk.com/leaders/edappadi-k-palaniswami</loc>
+    <lastmod>2025-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  <url>
-    <loc>https://yourdomain.com/app</loc>
-    <lastmod>2024-12-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://yourdomain.com/settings</loc>
-    <lastmod>2024-12-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
+
 </urlset>
