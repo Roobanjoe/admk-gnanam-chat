@@ -15,7 +15,7 @@ const About = () => {
       title: language === "en" ? "Foundation" : "ஸ்தாபना",
       description: language === "en" 
         ? "AIADMK was founded by M. G. Ramachandran after breaking away from DMK"
-        : "திமுகவிலிருந்து பிரிந்த பின்னர் எம். ஜி. ராமச்சந்திரன் அ.இ.அ.த.மு.க-ஐ நிறுவினார்"
+        : "திமுகவிலிருந்து பிரிந்த பின்னர் எம். ஜி. ராமச்சந்திரன் அ.இ.அ. தி.மு.க-ஐ நிறுவினார்"
     },
     {
       year: "1977",
@@ -90,7 +90,7 @@ const About = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="font-display font-bold text-4xl lg:text-5xl mb-6 text-neon">
-            {language === "en" ? "About AIADMK" : "அ.இ.அ.த.மு.க பற்றி"}
+            {language === "en" ? "About AIADMK" : "அ.இ.அ. தி.மு.க பற்றி"}
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {language === "en"
@@ -113,13 +113,13 @@ const About = () => {
                 <p>
                   {language === "en"
                     ? "The All India Anna Dravida Munnetra Kazhagam (AIADMK) is a Dravidian political party in India, particularly in the state of Tamil Nadu where it has been one of the two major parties since the 1970s. The party was founded in 1972 by M. G. Ramachandran and is named after C. N. Annadurai, the former Chief Minister of Tamil Nadu."
-                    : "அகில இந்திய அண்ணா திராவிட முன்னேற்றக் கழகம் (அ.இ.அ.த.மு.க) இந்தியாவில், குறிப்பாக தமிழ்நாடு மாநிலத்தில் உள்ள ஒரு திராவிட அரசியல் கட்சியாகும், இது 1970களில் இருந்து இரண்டு முக்கிய கட்சிகளில் ஒன்றாக இருந்து வருகிறது. இந்த கட்சி 1972 இல் எம். ஜி. ராமச்சந்திரனால் நிறுவப்பட்டது, தமிழ்நாட்டின் முன்னாள் முதலமைச்சர் சி. என். அண்ணாதுரையின் பெயரிடப்பட்டது."
+                    : "அகில இந்திய அண்ணா திராவிட முன்னேற்றக் கழகம் (அ.இ.அ. தி.மு.க) இந்தியாவில், குறிப்பாக தமிழ்நாடு மாநிலத்தில் உள்ள ஒரு திராவிட அரசியல் கட்சியாகும், இது 1970களில் இருந்து இரண்டு முக்கிய கட்சிகளில் ஒன்றாக இருந்து வருகிறது. இந்த கட்சி 1972 இல் எம். ஜி. ராமச்சந்திரனால் நிறுவப்பட்டது, தமிழ்நாட்டின் முன்னாள் முதலமைச்சர் சி. என். அண்ணாதுரையின் பெயரிடப்பட்டது."
                   }
                 </p>
                 <p>
                   {language === "en"
                     ? "The party has played a crucial role in Tamil Nadu's political landscape, governing the state for multiple terms and implementing various welfare schemes that have benefited millions of people. AIADMK has been at the forefront of championing Tamil rights, women's empowerment, and social justice."
-                    : "தமிழ்நாட்டின் அரசியல் நிலப்பரப்பில் கட்சி முக்கிய பங்கு வகித்துள்ளது, பல முறை மாநிலத்தை ஆட்சி செய்து, மில்லியன் கணக்கான மக்களுக்கு பயனளித்த பல்வேறு நலத்திட்டங்களை நடைமுறைப்படுத்தியுள்ளது. தமிழ் உரிமைகள், பெண்கள் அதிகாரமளித்தல் மற்றும் சமூக நீதிக்காக போராடுவதில் அ.இ.அ.த.மு.க முன்னணியில் இருந்து வருகிறது."
+                    : "தமிழ்நாட்டின் அரசியல் நிலப்பரப்பில் கட்சி முக்கிய பங்கு வகித்துள்ளது, பல முறை மாநிலத்தை ஆட்சி செய்து, மில்லியன் கணக்கான மக்களுக்கு பயனளித்த பல்வேறு நலத்திட்டங்களை நடைமுறைப்படுத்தியுள்ளது. தமிழ் உரிமைகள், பெண்கள் அதிகாரமளித்தல் மற்றும் சமூக நீதிக்காக போராடுவதில் அ.இ.அ. தி.மு.க முன்னணியில் இருந்து வருகிறது."
                   }
                 </p>
               </div>
