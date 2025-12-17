@@ -36,7 +36,7 @@ const Index = () => {
       title: t("partyLeaders"),
       description: language === "en" 
         ? "Explore the leadership history and contributions of AIADMK leaders"
-        : "அ.இ.அ. தி.மு.க தலைவர்களின் வரலாறு மற்றும் பங்களிப்புகளை அறியுங்கள்",
+        : "அ.இ.அ.தி.மு.க தலைவர்களின் வரலாறு மற்றும் பங்களிப்புகளை அறியுங்கள்",
       href: "/leaders",
       color: "from-blue-500/20 to-cyan-500/20"
     },
@@ -164,7 +164,7 @@ const Index = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {language === "en" 
                 ? "Explore comprehensive information about AIADMK's history, leadership, and vision"
-                : "அ.இ.அ. தி.மு.க-வின் வரலாறு, தலைமை மற்றும் பார்வை பற்றிய விரிவான தகவல்களை அறியுங்கள்"
+                : "அ.இ.அ.தி.மு.க-வின் வரலாறு, தலைமை மற்றும் பார்வை பற்றிய விரிவான தகவல்களை அறியுங்கள்"
               }
             </p>
           </div>
@@ -241,7 +241,7 @@ const Index = () => {
             <p className="text-muted-foreground">
               {language === "en" 
                 ? "© 2024 AIADMK Knowledge Platform. All rights reserved."
-                : "© 2024 அ.இ.அ. தி.மு.க அறிவு தளம். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை."
+                : "© 2024 அ.இ.அ.தி.மு.க அறிவு தளம். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை."
               }
             </p>
           </div>

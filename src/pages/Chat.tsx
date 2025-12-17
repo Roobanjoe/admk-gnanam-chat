@@ -69,7 +69,7 @@ const Chat = () => {
             <GlassCardHeader className="flex flex-row items-center justify-between p-2 border-b border-glass-border flex-shrink-0 h-[10%]">
               <div className="flex items-center space-x-2">
                 <GlassCardTitle className="text-sm font-semibold">
-                  {language === "en" ? "AIADMK Information Assistant" : "அ.இ.அ. தி.மு.க தகவல் உதவியாளர்"}
+                  {language === "en" ? "AIADMK Information Assistant" : "அ.இ.அ.தி.மு.க தகவல் உதவியாளர்"}
                 </GlassCardTitle>
                 <Badge variant={isConnected ? "default" : "secondary"} className="text-xs">
                   {isConnected 
@@ -160,7 +160,7 @@ const Chat = () => {
                   src="https://cdn.botpress.cloud/webchat/v3.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/08/22/09/20250822093624-WH17FEK6.json"
                   className="w-full h-full border-0"
                   allow="microphone; camera"
-                  title={language === "en" ? "AIADMK Information Assistant" : "அ.இ.அ. தி.மு.க தகவல் உதவியாளர்"}
+                  title={language === "en" ? "AIADMK Information Assistant" : "அ.இ.அ.தி.மு.க தகவல் உதவியாளர்"}
                   onLoad={handleIframeLoad}
                   onError={() => {
                     setIsLoading(false);

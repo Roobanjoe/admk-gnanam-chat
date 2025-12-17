@@ -99,14 +99,14 @@ export const translations = {
     signOut: "வெளியேறு",
     
     // Hero section
-    heroTitle: "அ.இ.அ. தி.மு.க",
+    heroTitle: "அ.இ.அ.தி.மு.க",
     heroSubtitle: "அறிவு தளம்",
     startChat: "அரட்டை தொடங்கு",
     learnMore: "மேலும் அறிய",
     
     // Features
     featuredSections: "சிறப்பு பிரிவுகள்",
-    partyLeaders: "அ.இ.அ. தி.மு.க தலைவர்கள்",
+    partyLeaders: "அ.இ.அ.தி.மு.க தலைவர்கள்",
     electionHistory: "தேர்தல் வரலாறு", 
     partyManifestos: "கட்சி அறிக்கைகள்",
     
