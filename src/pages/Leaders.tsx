@@ -30,7 +30,7 @@ const Leaders = () => {
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {language === "en"
               ? "Explore the visionary leaders who shaped AIADMK and Tamil Nadu's political landscape"
-              : "அ.இ.அ. தி.மு.க மற்றும் தமிழ்நாட்டின் அரசியல் நிலப்பரப்பை வடிவமைத்த தொலைநோக்கு தலைவர்களை ஆராயுங்கள்"
+              : "அ.இ.அ.தி.மு.க மற்றும் தமிழ்நாட்டின் அரசியல் நிலப்பரப்பை வடிவமைத்த தொலைநோக்கு தலைவர்களை ஆராயுங்கள்"
             }
           </p>
         </div>
