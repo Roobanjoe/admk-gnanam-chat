@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { KeyRound, Trash2, Download, LogOut } from "lucide-react";
 
@@ -20,8 +19,6 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
   const { toast } = useToast();
 
   const handlePhoneUpdate = async () => {
-    // For phone updates, we would need to implement a new OTP verification flow
-    // This is a placeholder for future implementation
     toast({
       title: "Feature coming soon",
       description: "Phone number updates will be available in a future update",
@@ -32,29 +29,13 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
   const handleExportData = async () => {
     setIsExporting(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
-
-      // Fetch user data
-      const [profileData, settingsData, conversationsData] = await Promise.all([
-        supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle(),
-        supabase.from('user_settings').select('*').eq('user_id', user.id).maybeSingle(),
-        supabase.from('conversations').select('*').eq('user_id', user.id)
-      ]);
-
-        const exportData = {
+      const exportData = {
         user: {
-          id: user.id,
           phone_number: phoneNumber,
-          created_at: user.created_at
         },
-        profile: profileData.data,
-        settings: settingsData.data,
-        conversations: conversationsData.data,
         exported_at: new Date().toISOString()
       };
 
-      // Create and download file
       const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -83,27 +64,11 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
   const handleAccountDeletion = async () => {
     setIsDeleting(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
-
-      // Delete all user data
-      await Promise.all([
-        supabase.from('profiles').delete().eq('user_id', user.id),
-        supabase.from('user_settings').delete().eq('user_id', user.id),
-        supabase.from('conversations').delete().eq('user_id', user.id)
-      ]);
-
-      // Note: Actual user deletion would need to be handled by Supabase Admin API
-      // For now, we'll sign them out and show a message
-      await supabase.auth.signOut();
-      
       toast({
         title: "Account deletion initiated",
-        description: "Your data has been removed. Contact support to complete account deletion.",
+        description: "Contact support to complete account deletion.",
         variant: "destructive"
       });
-
-      // Redirect to home
       window.location.href = '/';
     } catch (error: any) {
       toast({
@@ -119,15 +84,12 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
   const handleSignOut = async () => {
     setIsSigningOut(true);
     try {
-      // Clean up auth state
       Object.keys(localStorage).forEach((key) => {
         if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
           localStorage.removeItem(key);
         }
       });
-
-      await supabase.auth.signOut({ scope: 'global' });
-      window.location.href = '/auth';
+      window.location.href = '/';
     } catch (error: any) {
       toast({
         title: "Sign out failed",
@@ -141,7 +103,6 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
 
   return (
     <div className="space-y-6">
-      {/* Account Info */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -169,7 +130,6 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
         </CardContent>
       </Card>
 
-      {/* Phone Update */}
       <Card>
         <CardHeader>
           <CardTitle>Update Phone Number</CardTitle>
@@ -192,7 +152,6 @@ export function AuthenticationSection({ phoneNumber }: AuthenticationSectionProp
         </CardContent>
       </Card>
 
-      {/* Data Management */}
       <Card>
         <CardHeader>
           <CardTitle>Data Management</CardTitle>

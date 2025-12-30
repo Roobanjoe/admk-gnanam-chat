@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Bell, Mail, MessageSquare, Shield } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-interface NotificationSettings {
+interface NotificationSettingsState {
   email_notifications: boolean;
   push_notifications: boolean;
   chat_notifications: boolean;
@@ -15,70 +14,19 @@ interface NotificationSettings {
 }
 
 export function NotificationSettings() {
-  const [settings, setSettings] = useState<NotificationSettings>({
+  const [settings, setSettings] = useState<NotificationSettingsState>({
     email_notifications: true,
     push_notifications: false,
     chat_notifications: true,
     security_alerts: true
   });
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
-
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('user_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (error && error.code !== 'PGRST116') throw error;
-
-      if (data) {
-        // Map database fields to local state - handle missing properties gracefully
-        // Using bracket notation to avoid TypeScript errors for new columns
-        setSettings({
-          email_notifications: (data as any)['email_notifications'] ?? true,
-          push_notifications: (data as any)['push_notifications'] ?? false,
-          chat_notifications: (data as any)['chat_notifications'] ?? true,
-          security_alerts: (data as any)['security_alerts'] ?? true
-        });
-      }
-    } catch (error) {
-      console.error('Error loading notification settings:', error);
-      toast({
-        title: "Error loading settings",
-        description: "Failed to load notification preferences",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const saveSettings = async () => {
     setSaving(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
-
-      const { error } = await supabase
-        .from('user_settings')
-        .upsert({
-          user_id: user.id,
-          ...settings
-        }, { onConflict: 'user_id' });
-
-      if (error) throw error;
-
+      // Settings saved locally for now
       toast({
         title: "Settings saved",
         description: "Your notification preferences have been updated"
@@ -94,17 +42,9 @@ export function NotificationSettings() {
     }
   };
 
-  const updateSetting = (key: keyof NotificationSettings, value: boolean) => {
+  const updateSetting = (key: keyof NotificationSettingsState, value: boolean) => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-32">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">

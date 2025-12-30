@@ -40,6 +40,7 @@ export const translations = {
     chat: "Chat",
     settings: "Settings",
     knowledge: "Knowledge",
+    calendar: "Calendar",
     signIn: "Sign In",
     signOut: "Sign Out",
     
@@ -95,6 +96,7 @@ export const translations = {
     chat: "அரட்டை",
     settings: "அமைப்புகள்",
     knowledge: "அறிவு",
+    calendar: "நாட்காட்டி",
     signIn: "உள்நுழை",
     signOut: "வெளியேறு",
     
