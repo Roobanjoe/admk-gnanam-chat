@@ -9,18 +9,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { BackButton } from "@/components/ui/back-button";
 import { useTheme } from "next-themes";
-import { Sun, Moon, Monitor, User, Shield, Trash2 } from "lucide-react";
+import { Sun, Moon, Monitor, User, Mail, Shield, Trash2 } from "lucide-react";
 import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { ProfileUpload } from "@/components/settings/ProfileUpload";
 import { AuthenticationSection } from "@/components/settings/AuthenticationSection";
 import { NotificationSettings } from "@/components/settings/NotificationSettings";
 import { useProfile } from "@/hooks/useProfile";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const Settings = () => {
   const [language, setLanguage] = useState<Language>("en");
-  const [phoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [tnPartyOnly, setTnPartyOnly] = useState(false);
@@ -32,6 +33,37 @@ const Settings = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Load user phone number and settings
+    const loadUserData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // Get phone number from profiles table
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('phone_number')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        setPhoneNumber(profile?.phone_number || "");
+      }
+
+      // Load user settings
+      const { data: settings } = await supabase
+        .from('user_settings')
+        .select('*')
+        .eq('user_id', user?.id)
+        .maybeSingle();
+
+      if (settings) {
+        setLanguage(settings.default_language as Language);
+        setTnPartyOnly(settings.tn_party_only || false);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  useEffect(() => {
     if (profile) {
       setDisplayName(profile.display_name || "");
       setBio(profile.bio || "");
@@ -39,6 +71,7 @@ const Settings = () => {
   }, [profile]);
 
   useEffect(() => {
+    // Update active section based on URL hash
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       if (hash) {
@@ -46,8 +79,10 @@ const Settings = () => {
       }
     };
 
+    // Set initial section
     handleHashChange();
 
+    // Listen for hash changes
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
@@ -66,17 +101,52 @@ const Settings = () => {
   };
 
   const handleSettingsUpdate = async () => {
-    toast({
-      title: "Settings updated",
-      description: "Your settings have been saved successfully"
-    });
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await supabase
+        .from('user_settings')
+        .upsert({
+          user_id: user.id,
+          default_language: language,
+          tn_party_only: tnPartyOnly
+        }, { onConflict: 'user_id' });
+
+      toast({
+        title: "Settings updated",
+        description: "Your settings have been saved successfully"
+      });
+    } catch (error) {
+      toast({
+        title: "Update failed",
+        description: "Failed to update settings. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const clearChatHistory = async () => {
-    toast({
-      title: "History cleared",
-      description: "Your chat history has been cleared successfully"
-    });
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await supabase
+        .from('conversations')
+        .delete()
+        .eq('user_id', user.id);
+
+      toast({
+        title: "History cleared",
+        description: "Your chat history has been cleared successfully"
+      });
+    } catch (error) {
+      toast({
+        title: "Clear failed",
+        description: "Failed to clear chat history. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const renderContent = () => {
@@ -317,9 +387,12 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="flex h-screen">
+        {/* Left Sidebar */}
         <SettingsSidebar />
         
+        {/* Main Content */}
         <div className="flex-1 flex flex-col">
+          {/* Header */}
           <div className="border-b border-white/10 bg-glass-light">
             <div className="flex items-center justify-between p-4">
               <div className="flex items-center gap-4">
@@ -339,6 +412,7 @@ const Settings = () => {
             </div>
           </div>
 
+          {/* Content Area */}
           <div className="flex-1 overflow-y-auto">
             <div className="max-w-2xl mx-auto p-6">
               {loading ? (

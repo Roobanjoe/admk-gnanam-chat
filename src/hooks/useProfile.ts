@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface Profile {
@@ -12,30 +13,68 @@ interface Profile {
 }
 
 export function useProfile() {
-  const [profile, setProfile] = useState<Profile | null>({
-    id: "local",
-    user_id: "local",
-    display_name: "",
-    bio: "",
-    avatar_url: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  });
-  const [loading] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        setProfile(data);
+      } else {
+        // Create profile if it doesn't exist
+        const { data: newProfile, error: createError } = await supabase
+          .from('profiles')
+          .insert([{ user_id: user.id }])
+          .select()
+          .single();
+
+        if (createError) throw createError;
+        setProfile(newProfile);
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error);
+      toast({
+        title: "Error loading profile",
+        description: "Failed to load your profile information",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!profile) return;
 
     setUpdating(true);
     try {
-      const updatedProfile = {
-        ...profile,
-        ...updates,
-        updated_at: new Date().toISOString()
-      };
-      setProfile(updatedProfile);
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('user_id', profile.user_id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setProfile(data);
       toast({
         title: "Profile updated",
         description: "Your profile has been updated successfully"
@@ -57,6 +96,6 @@ export function useProfile() {
     loading,
     updating,
     updateProfile,
-    refetch: () => {}
+    refetch: loadProfile
   };
 }

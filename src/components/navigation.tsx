@@ -13,8 +13,7 @@ import {
   Settings, 
   BookOpen,
   Menu,
-  X,
-  Calendar
+  X
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -32,8 +31,7 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
     { href: "/", icon: Home, label: t("home") },
     { href: "/about", icon: Info, label: t("about") },
     { href: "/leaders", icon: Users, label: t("leaders") },
-    { href: "/elections", icon: Vote, label: t("elections") },
-    { href: "/calendar", icon: Calendar, label: t("calendar") }
+    { href: "/elections", icon: Vote, label: t("elections") }
   ]
 
   const protectedItems: never[] = []

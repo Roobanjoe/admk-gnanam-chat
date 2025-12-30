@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Upload, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface ProfileUploadProps {
@@ -13,13 +14,13 @@ interface ProfileUploadProps {
 export function ProfileUpload({ currentAvatar, displayName, onAvatarUpdate }: ProfileUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | undefined>(currentAvatar);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const handleFileUpload = async (file: File) => {
     if (!file) return;
 
+    // Validate file type and size
     if (!file.type.startsWith('image/')) {
       toast({
         title: "Invalid file type",
@@ -29,7 +30,7 @@ export function ProfileUpload({ currentAvatar, displayName, onAvatarUpdate }: Pr
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
       toast({
         title: "File too large",
         description: "Please select an image smaller than 5MB",
@@ -41,10 +42,37 @@ export function ProfileUpload({ currentAvatar, displayName, onAvatarUpdate }: Pr
     setUploading(true);
 
     try {
-      // Create a local preview URL
-      const localUrl = URL.createObjectURL(file);
-      setPreviewUrl(localUrl);
-      onAvatarUpdate?.(localUrl);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/avatar.${fileExt}`;
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      const avatarUrl = data.publicUrl;
+
+      // Update profile in database
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .upsert(
+          { user_id: user.id, avatar_url: avatarUrl },
+          { onConflict: 'user_id' }
+        );
+
+      if (updateError) throw updateError;
+
+      onAvatarUpdate?.(avatarUrl);
       
       toast({
         title: "Avatar updated",
@@ -89,23 +117,30 @@ export function ProfileUpload({ currentAvatar, displayName, onAvatarUpdate }: Pr
     }
   };
 
+  const getAvatarFallback = () => {
+    if (displayName) {
+      return displayName.split(' ').map(n => n[0]).join('').toUpperCase();
+    }
+    return "U";
+  };
+
   return (
     <div className="flex flex-col items-center space-y-4">
       <div className="relative">
         <Avatar className="h-24 w-24">
-          <AvatarImage src={previewUrl} alt="Profile picture" />
+          <AvatarImage src={currentAvatar} alt="Profile picture" />
           <AvatarFallback className="text-lg">
             <User className="h-8 w-8" />
           </AvatarFallback>
         </Avatar>
         
-        {previewUrl && (
+        {currentAvatar && (
           <Button
             variant="outline"
             size="sm"
             className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
             onClick={() => {
-              setPreviewUrl(undefined);
+              // Handle avatar removal
               onAvatarUpdate?.("");
             }}
           >
