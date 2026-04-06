@@ -13,7 +13,8 @@ import {
   Settings, 
   BookOpen,
   Menu,
-  X
+  X,
+  ExternalLink
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
