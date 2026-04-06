@@ -60,21 +60,40 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
 
             {/* Navigation Links */}
             <div className="hidden xl:flex items-center space-x-1 flex-1 justify-center max-w-2xl">
-              {allItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm lg:text-base",
-                    isActive(item.href)
-                      ? "bg-neon/20 text-neon shadow-neon"
-                      : "text-muted-foreground hover:text-neon hover:bg-glass-hover"
-                  )}
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span className="whitespace-nowrap">{item.label}</span>
-                </Link>
-              ))}
+              {allItems.map((item) => {
+                const linkClasses = cn(
+                  "flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm lg:text-base",
+                  isActive(item.href)
+                    ? "bg-neon/20 text-neon shadow-neon"
+                    : "text-muted-foreground hover:text-neon hover:bg-glass-hover",
+                  (item as any).external && "animate-pulse hover:animate-none relative group"
+                );
+                if ((item as any).external) {
+                  return (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClasses}
+                    >
+                      <item.icon className="w-4 h-4" />
+                      <span className="whitespace-nowrap bg-gradient-to-r from-neon to-primary bg-clip-text text-transparent font-bold">{item.label}</span>
+                      <ExternalLink className="w-3 h-3 text-neon" />
+                    </a>
+                  );
+                }
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className={linkClasses}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span className="whitespace-nowrap">{item.label}</span>
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Right Side */}
