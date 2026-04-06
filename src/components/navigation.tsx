@@ -32,7 +32,8 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
     { href: "/", icon: Home, label: t("home") },
     { href: "/about", icon: Info, label: t("about") },
     { href: "/leaders", icon: Users, label: t("leaders") },
-    { href: "/elections", icon: Vote, label: t("elections") }
+    { href: "/elections", icon: Vote, label: t("elections") },
+    { href: "https://voteforaiadmk.aiadmk.ai/", icon: BookOpen, label: "Manifesto", external: true }
   ]
 
   const protectedItems: never[] = []
