@@ -13,7 +13,8 @@ import {
   Settings, 
   BookOpen,
   Menu,
-  X
+  X,
+  ExternalLink
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -31,7 +32,8 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
     { href: "/", icon: Home, label: t("home") },
     { href: "/about", icon: Info, label: t("about") },
     { href: "/leaders", icon: Users, label: t("leaders") },
-    { href: "/elections", icon: Vote, label: t("elections") }
+    { href: "/elections", icon: Vote, label: t("elections") },
+    { href: "https://voteforaiadmk.aiadmk.ai/", icon: BookOpen, label: "Manifesto", external: true }
   ]
 
   const protectedItems: never[] = []
@@ -58,21 +60,40 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
 
             {/* Navigation Links */}
             <div className="hidden xl:flex items-center space-x-1 flex-1 justify-center max-w-2xl">
-              {allItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm lg:text-base",
-                    isActive(item.href)
-                      ? "bg-neon/20 text-neon shadow-neon"
-                      : "text-muted-foreground hover:text-neon hover:bg-glass-hover"
-                  )}
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span className="whitespace-nowrap">{item.label}</span>
-                </Link>
-              ))}
+              {allItems.map((item) => {
+                const linkClasses = cn(
+                  "flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm lg:text-base",
+                  isActive(item.href)
+                    ? "bg-neon/20 text-neon shadow-neon"
+                    : "text-muted-foreground hover:text-neon hover:bg-glass-hover",
+                  (item as any).external && "animate-pulse hover:animate-none relative group"
+                );
+                if ((item as any).external) {
+                  return (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClasses}
+                    >
+                      <item.icon className="w-4 h-4" />
+                      <span className="whitespace-nowrap bg-gradient-to-r from-neon to-primary bg-clip-text text-transparent font-bold">{item.label}</span>
+                      <ExternalLink className="w-3 h-3 text-neon" />
+                    </a>
+                  );
+                }
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className={linkClasses}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span className="whitespace-nowrap">{item.label}</span>
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Right Side */}
@@ -127,22 +148,42 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
           <div className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-glass border-b border-glass-border max-h-[calc(100vh-4rem)] overflow-y-auto">
             <GlassCard variant="minimal" padding="sm" className="m-3 sm:m-4 rounded-2xl">
               <div className="space-y-1">
-                {allItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={cn(
-                      "flex items-center space-x-3 px-3 sm:px-4 py-3 rounded-xl font-medium transition-all duration-300 w-full text-sm sm:text-base",
-                      isActive(item.href)
-                        ? "bg-neon/20 text-neon"
-                        : "text-muted-foreground hover:text-neon hover:bg-glass-hover"
-                    )}
-                  >
-                    <item.icon className="w-4 h-4 flex-shrink-0" />
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
+                {allItems.map((item) => {
+                  const mobileLinkClasses = cn(
+                    "flex items-center space-x-3 px-3 sm:px-4 py-3 rounded-xl font-medium transition-all duration-300 w-full text-sm sm:text-base",
+                    isActive(item.href)
+                      ? "bg-neon/20 text-neon"
+                      : "text-muted-foreground hover:text-neon hover:bg-glass-hover",
+                    (item as any).external && "animate-pulse hover:animate-none"
+                  );
+                  if ((item as any).external) {
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={mobileLinkClasses}
+                      >
+                        <item.icon className="w-4 h-4 flex-shrink-0" />
+                        <span className="bg-gradient-to-r from-neon to-primary bg-clip-text text-transparent font-bold">{item.label}</span>
+                        <ExternalLink className="w-3 h-3 text-neon ml-auto" />
+                      </a>
+                    );
+                  }
+                  return (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={mobileLinkClasses}
+                    >
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
                 
                 <div className="border-t border-glass-border pt-3 mt-3">
                   <div className="flex justify-center px-3 sm:px-4 py-2">
