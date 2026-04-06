@@ -148,22 +148,42 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
           <div className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-glass border-b border-glass-border max-h-[calc(100vh-4rem)] overflow-y-auto">
             <GlassCard variant="minimal" padding="sm" className="m-3 sm:m-4 rounded-2xl">
               <div className="space-y-1">
-                {allItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={cn(
-                      "flex items-center space-x-3 px-3 sm:px-4 py-3 rounded-xl font-medium transition-all duration-300 w-full text-sm sm:text-base",
-                      isActive(item.href)
-                        ? "bg-neon/20 text-neon"
-                        : "text-muted-foreground hover:text-neon hover:bg-glass-hover"
-                    )}
-                  >
-                    <item.icon className="w-4 h-4 flex-shrink-0" />
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
+                {allItems.map((item) => {
+                  const mobileLinkClasses = cn(
+                    "flex items-center space-x-3 px-3 sm:px-4 py-3 rounded-xl font-medium transition-all duration-300 w-full text-sm sm:text-base",
+                    isActive(item.href)
+                      ? "bg-neon/20 text-neon"
+                      : "text-muted-foreground hover:text-neon hover:bg-glass-hover",
+                    (item as any).external && "animate-pulse hover:animate-none"
+                  );
+                  if ((item as any).external) {
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={mobileLinkClasses}
+                      >
+                        <item.icon className="w-4 h-4 flex-shrink-0" />
+                        <span className="bg-gradient-to-r from-neon to-primary bg-clip-text text-transparent font-bold">{item.label}</span>
+                        <ExternalLink className="w-3 h-3 text-neon ml-auto" />
+                      </a>
+                    );
+                  }
+                  return (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={mobileLinkClasses}
+                    >
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
                 
                 <div className="border-t border-glass-border pt-3 mt-3">
                   <div className="flex justify-center px-3 sm:px-4 py-2">
