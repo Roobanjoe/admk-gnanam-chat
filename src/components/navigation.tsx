@@ -33,6 +33,7 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
     { href: "/about", icon: Info, label: t("about") },
     { href: "/leaders", icon: Users, label: t("leaders") },
     { href: "/elections", icon: Vote, label: t("elections") },
+    { href: "/download-creatives", icon: FileText, label: "Download Creatives" },
     { href: "https://voteforaiadmk.aiadmk.ai/", icon: BookOpen, label: "Manifesto", external: true }
   ]
 
