@@ -56,7 +56,7 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
                 alt="CHAT_AI_ADMK Logo"
                 className="w-8 lg:w-10 h-8 lg:h-10 rounded-xl p-1 shadow-[0_0_10px_rgba(255,255,255,0.4),0_0_20px_rgba(0,255,255,0.2)] backdrop-blur-sm border border-white/20 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.6),0_0_30px_rgba(0,255,255,0.3)] group-hover:scale-110 transition-all duration-300"
               />
-              <span className="font-display font-bold text-lg lg:text-xl text-neon">CHAT_AI_ADMK</span>
+              <span className="font-display font-bold text-lg lg:text-xl text-neon">AI_ADMK</span>
             </Link>
 
             {/* Navigation Links */}
@@ -119,7 +119,7 @@ export function Navigation({ language, onLanguageChange }: NavigationProps) {
                 alt="CHAT_AI_ADMK Logo" 
                 className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg p-1 shadow-[0_0_8px_rgba(255,255,255,0.4),0_0_16px_rgba(0,255,255,0.2)] backdrop-blur-sm border border-white/20"
               />
-              <span className="font-display font-bold text-base sm:text-lg text-neon">CHAT_AI_ADMK</span>
+              <span className="font-display font-bold text-base sm:text-lg text-neon">AI_ADMK</span>
             </Link>
 
             {/* Right Side - Mobile */}
