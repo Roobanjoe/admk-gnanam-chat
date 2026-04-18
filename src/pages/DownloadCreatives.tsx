@@ -17,30 +17,24 @@ import {
 
 const preferredFolderOrder = [
   "aiadmk ads",
-  "vote for aiadmk ads",
   "aiadmk manifesto",
-  "ai aiadmk",
   "all for errattai ilai",
   "books",
-  "campaign out",
+  "campaign",
   "candidate lists",
-  "edapaadiyaar branding",
+  "edapadiyaar branding",
   "eps creatives",
   "errattai ilai alanum",
   "fanmade reel",
   "infographics",
   "josiyam pakkalamaa",
   "josiyar",
-  "makkalukaga eps",
-  "manifesto posters",
+  "makkalukaaga eps",
   "manifesto testimonials",
   "reel",
   "songs",
   "tholpaavai",
   "videos fan made",
-  "ai",
-  "mime",
-  "posters",
 ];
 
 const normalizeFolderName = (value: string) =>
