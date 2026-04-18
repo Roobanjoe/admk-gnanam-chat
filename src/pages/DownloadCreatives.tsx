@@ -15,12 +15,73 @@ import {
   GlassCardDescription,
 } from "@/components/ui/glass-card";
 
+const preferredFolderOrder = [
+  "aiadmk ads",
+  "vote for aiadmk ads",
+  "aiadmk manifesto",
+  "ai aiadmk",
+  "all for errattai ilai",
+  "books",
+  "campaign out",
+  "candidate lists",
+  "edapaadiyaar branding",
+  "eps creatives",
+  "errattai ilai alanum",
+  "fanmade reel",
+  "infographics",
+  "josiyam pakkalamaa",
+  "josiyar",
+  "makkalukaga eps",
+  "manifesto posters",
+  "manifesto testimonials",
+  "reel",
+  "songs",
+  "tholpaavai",
+  "videos fan made",
+  "ai",
+  "mime",
+  "posters",
+];
+
+const normalizeFolderName = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[._-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 export default function DownloadCreatives() {
   const [language, setLanguage] = useState<Language>("en");
 
   const openFolder = (driveFolderLink: string) => {
     window.open(driveFolderLink, "_blank", "noopener,noreferrer");
   };
+
+  const sortedFolders = [...creativeFolders].sort((leftFolder, rightFolder) => {
+    const leftName = normalizeFolderName(leftFolder.name);
+    const rightName = normalizeFolderName(rightFolder.name);
+    const leftIndex = preferredFolderOrder.findIndex((name) => leftName.includes(name));
+    const rightIndex = preferredFolderOrder.findIndex((name) => rightName.includes(name));
+
+    if (leftIndex === -1 && rightIndex === -1) {
+      return leftFolder.name.localeCompare(rightFolder.name);
+    }
+
+    if (leftIndex === -1) {
+      return 1;
+    }
+
+    if (rightIndex === -1) {
+      return -1;
+    }
+
+    if (leftIndex !== rightIndex) {
+      return leftIndex - rightIndex;
+    }
+
+    return leftFolder.name.localeCompare(rightFolder.name);
+  });
 
   return (
     <div className="relative min-h-screen w-full">
@@ -51,7 +112,7 @@ export default function DownloadCreatives() {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
           <AnimatePresence>
-            {creativeFolders.map((folder, index) => (
+            {sortedFolders.map((folder, index) => (
               <motion.div
                 key={folder.id}
                 initial={{ opacity: 0, y: 20 }}
